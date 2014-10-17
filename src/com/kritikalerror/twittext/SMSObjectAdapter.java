@@ -11,6 +11,8 @@ import java.util.ArrayList;
 
 /**
  * Created by Michael on 10/16/2014.
+ *
+ * Custom Adapter to display tweets in a ListView container for each Fragment
  */
 public class SMSObjectAdapter extends ArrayAdapter<SMSObject> {
 

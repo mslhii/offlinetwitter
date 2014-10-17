@@ -6,8 +6,8 @@ import com.kritikalerror.twittext.adapter.TabsAdapter;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.ActionBar.Tab;
-import android.app.Dialog;
 import android.app.FragmentTransaction;
+import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -15,9 +15,6 @@ import android.telephony.SmsManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 public class MainActivity extends FragmentActivity implements ActionBar.TabListener {
@@ -26,10 +23,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private TabsAdapter mAdapter;
 	private ActionBar mActionBar;
 	// Tab titles
-	private String[] mTabTitles = { "Subscriptions", "Messages", "Notifications" };
-
-    // Twitter Shortcode
-    final String TWITTER_SHORTCODE = "40404";
+	private String[] mTabTitles = { "Home", "Discover", "Activity" };
 
 	@SuppressLint("NewApi")
 	@Override
@@ -87,6 +81,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
+        menu.findItem(R.id.action_search).getActionView();
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -94,70 +89,26 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_compose: //Send Tweet
-                sendSMS(R.id.action_compose);
+                SMSHelpers.sendDialogSMS(getApplicationContext(), MainActivity.this, R.id.action_compose);
+                return super.onOptionsItemSelected(item);
+            case R.id.action_alert: //Send Tweet
+                Toast.makeText(getApplicationContext(), "Not implemented yet, coming soon!", Toast.LENGTH_LONG).show();
+                return super.onOptionsItemSelected(item);
+            case R.id.action_message: //Send Tweet
+                Toast.makeText(getApplicationContext(), "Not implemented yet, coming soon!", Toast.LENGTH_LONG).show();
                 return super.onOptionsItemSelected(item);
             case R.id.action_follow: //Follow user
-                sendSMS(R.id.action_follow);
+                SMSHelpers.sendDialogSMS(getApplicationContext(), MainActivity.this, R.id.action_follow);
                 return super.onOptionsItemSelected(item);
-            case R.id.action_search: //Search tweets
+            case R.id.action_search: //Search tweets and/or users
                 Toast.makeText(getApplicationContext(), "Not implemented yet, coming soon!", Toast.LENGTH_LONG).show();
+                return super.onOptionsItemSelected(item);
+            case R.id.action_exit: //Stops all subscriptions and exits to Login Page
+                SMSHelpers.sendHiddenSMS(getApplicationContext(), "OFF");
                 return super.onOptionsItemSelected(item);
             default:
                 Toast.makeText(getApplicationContext(), item.getItemId(), Toast.LENGTH_LONG).show();
                 return super.onOptionsItemSelected(item);
         }
     }
-
-    public boolean sendSMS(int designator) {
-        String actionString = "";
-        final Dialog smsDialog = new Dialog(MainActivity.this);
-        smsDialog.setContentView(R.layout.sms_dialog);
-        final EditText prepareTweet = (EditText) smsDialog.findViewById(R.id.search);
-        Button saveButton = (Button) smsDialog.findViewById(R.id.saveBtn);
-
-        switch(designator) {
-            case R.id.action_compose:
-                smsDialog.setTitle("Send Tweet");
-                prepareTweet.setHint("What's on your mind?");
-                saveButton.setText("Tweet!");
-                break;
-            case R.id.action_follow:
-                smsDialog.setTitle("Follow Tweeter");
-                prepareTweet.setHint("Who would you like to follow?");
-                saveButton.setText("Follow!");
-                actionString = "FOLLOW ";
-                break;
-            default:
-                return false; //No appropriate action to take
-        }
-
-        // Need final String due to inner class
-        final String paramString = actionString;
-
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                String tweetParams = paramString + prepareTweet.getText().toString();
-
-                try {
-                    SmsManager smsManager = SmsManager.getDefault();
-                    smsManager.sendTextMessage(TWITTER_SHORTCODE, null, tweetParams, null, null);
-                    Toast.makeText(getApplicationContext(), "Sent the request!",
-                            Toast.LENGTH_LONG).show();
-                } catch (Exception e) {
-                    Toast.makeText(getApplicationContext(),
-                            "Request failed, please try again later!",
-                            Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
-                }
-
-                smsDialog.dismiss();
-            }
-        });
-        smsDialog.show();
-
-        return true;
-    }
-
 }
