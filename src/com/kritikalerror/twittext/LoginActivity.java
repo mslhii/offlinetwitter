@@ -112,13 +112,21 @@ public class LoginActivity extends Activity {
             builder1.setNegativeButton("OK",
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
-                            /*
-                            Intent smsIntent = new Intent(Intent.ACTION_VIEW);
-                            smsIntent.setType("vnd.android-dir/mms-sms");
-                            smsIntent.putExtra("address", SMSHelpers.TWITTER_SHORTCODE);
-                            smsIntent.putExtra("sms_body","");
-                            startActivity(smsIntent);
-                            */
+                            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) //Greater than JB
+                            {
+                                Intent sendIntent = new Intent(Intent.ACTION_SEND);
+                                sendIntent.setType("text/plain");
+                                sendIntent.putExtra(Intent.EXTRA_TEXT, "");
+                                startActivity(sendIntent);
+                            }
+                            else //earlier versions
+                            {
+                                Intent smsIntent = new Intent(Intent.ACTION_VIEW);
+                                smsIntent.setType("vnd.android-dir/mms-sms");
+                                smsIntent.putExtra("address", SMSHelpers.TWITTER_SHORTCODE);
+                                smsIntent.putExtra("sms_body","");
+                                startActivity(smsIntent);
+                            }
                             dialog.cancel();
                         }
                     });
@@ -132,21 +140,5 @@ public class LoginActivity extends Activity {
             e.printStackTrace();
         }
 
-        //Temp place to put it
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) //Greater than JB
-        {
-            Intent sendIntent = new Intent(Intent.ACTION_SEND);
-            sendIntent.setType("text/plain");
-            sendIntent.putExtra(Intent.EXTRA_TEXT, "");
-            startActivity(sendIntent);
-        }
-        else //earlier versions
-        {
-            Intent smsIntent = new Intent(Intent.ACTION_VIEW);
-            smsIntent.setType("vnd.android-dir/mms-sms");
-            smsIntent.putExtra("address", SMSHelpers.TWITTER_SHORTCODE);
-            smsIntent.putExtra("sms_body","");
-            startActivity(smsIntent);
-        }
 	}
 }

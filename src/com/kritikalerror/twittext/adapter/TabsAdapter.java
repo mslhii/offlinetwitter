@@ -1,8 +1,8 @@
 package com.kritikalerror.twittext.adapter;
 
+import com.kritikalerror.twittext.ActivityFragment;
+import com.kritikalerror.twittext.HomeFragment;
 import com.kritikalerror.twittext.MessagesFragment;
-import com.kritikalerror.twittext.NotificationsFragment;
-import com.kritikalerror.twittext.SubscriptionsFragment;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -20,13 +20,13 @@ public class TabsAdapter extends FragmentPagerAdapter {
 		switch (index) {
 		case 0:
 			// Top Rated fragment activity
-			return new SubscriptionsFragment();
+			return new HomeFragment();
 		case 1:
 			// Games fragment activity
 			return new MessagesFragment();
 		case 2:
 			// Movies fragment activity
-			return new NotificationsFragment();
+			return new ActivityFragment();
 		}
 
 		return null;

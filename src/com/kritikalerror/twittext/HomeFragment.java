@@ -18,7 +18,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class SubscriptionsFragment extends Fragment {
+public class HomeFragment extends Fragment {
 
     ListView subsView;
     SMSObjectAdapter adapter;

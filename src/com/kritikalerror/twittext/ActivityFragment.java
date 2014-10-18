@@ -13,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-public class NotificationsFragment extends Fragment {
+public class ActivityFragment extends Fragment {
 
     ListView subsView;
     SimpleCursorAdapter adapter;

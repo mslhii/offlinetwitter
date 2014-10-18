@@ -47,6 +47,23 @@ public class SMSHelpers {
         return true;
     }
 
+    public static boolean sendHiddenSMS(final Context context, String actionString, String actionParams) {
+        try {
+            SmsManager smsManager = SmsManager.getDefault();
+            smsManager.sendTextMessage(SMSHelpers.TWITTER_SHORTCODE, null, actionString + actionParams, null, null);
+            Toast.makeText(context, "Sent the request!",
+                    Toast.LENGTH_LONG).show();
+        } catch (Exception e) {
+            Toast.makeText(context,
+                    "Request failed, please try again later!",
+                    Toast.LENGTH_LONG).show();
+            e.printStackTrace();
+            return false;
+        }
+
+        return true;
+    }
+
     public static boolean sendDialogSMS(final Context context, Activity activity, int designator) {
         String actionString = "";
         final Dialog smsDialog = new Dialog(activity);
