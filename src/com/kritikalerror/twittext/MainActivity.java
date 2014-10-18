@@ -8,6 +8,7 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
@@ -99,6 +100,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                 return super.onOptionsItemSelected(item);
             case R.id.action_follow: //Follow user
                 SMSHelpers.sendDialogSMS(getApplicationContext(), MainActivity.this, R.id.action_follow);
+                return super.onOptionsItemSelected(item);
+            case R.id.action_profile: //Send Tweet
+                Intent myIntent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(myIntent);
                 return super.onOptionsItemSelected(item);
             case R.id.action_search: //Search tweets and/or users
                 Toast.makeText(getApplicationContext(), "Not implemented yet, coming soon!", Toast.LENGTH_LONG).show();

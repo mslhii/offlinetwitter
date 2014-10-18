@@ -3,11 +3,14 @@ package com.kritikalerror.twittext;
 
 import java.util.ArrayList;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.IntentFilter;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.util.Log;
@@ -21,8 +24,6 @@ import android.content.Intent;
 import android.database.Cursor;
 
 public class LoginActivity extends Activity {
-    private BroadcastReceiver mIntentReceiver;
-    private ProgressDialog mWaitingDialog;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -41,7 +42,10 @@ public class LoginActivity extends Activity {
 	    final Button registerButton = (Button) findViewById(R.id.register); 
 	    registerButton.setOnClickListener(new View.OnClickListener() {
 	        public void onClick(View view) { 
-	        	register();
+
+                register();
+                Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(myIntent);
 	        }
 	    });
 
@@ -101,13 +105,26 @@ public class LoginActivity extends Activity {
             Toast.makeText(getApplicationContext(), "Sent the request!",
                     Toast.LENGTH_LONG).show();
 
-            mWaitingDialog = new ProgressDialog(this);
-            mWaitingDialog.setCancelable(true);
-            mWaitingDialog.setCanceledOnTouchOutside(false);
-            mWaitingDialog.setTitle("Waiting");
-            mWaitingDialog.setMessage("Please wait for Twitter's response.");
-            mWaitingDialog.isIndeterminate();
-            mWaitingDialog.show();
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(getApplicationContext());
+            builder1.setTitle("Please register using Messaging app");
+            builder1.setMessage("Register using the Messaging app. When you are finished, press the back button.");
+            builder1.setCancelable(true);
+            builder1.setNegativeButton("OK",
+                    new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            /*
+                            Intent smsIntent = new Intent(Intent.ACTION_VIEW);
+                            smsIntent.setType("vnd.android-dir/mms-sms");
+                            smsIntent.putExtra("address", SMSHelpers.TWITTER_SHORTCODE);
+                            smsIntent.putExtra("sms_body","");
+                            startActivity(smsIntent);
+                            */
+                            dialog.cancel();
+                        }
+                    });
+
+            AlertDialog alert11 = builder1.create();
+            alert11.show();
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(),
                     "Request failed, please try again later!",
@@ -115,30 +132,21 @@ public class LoginActivity extends Activity {
             e.printStackTrace();
         }
 
-        IntentFilter intentFilter = new IntentFilter("SMSInterceptReceiver.intent.MAIN");
-
-        mIntentReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                String msg = intent.getStringExtra("get_msg");
-
-                //Process the sms format and extract body and phoneNumber
-                msg = msg.replace("\n", "");
-                String body = msg.substring(msg.lastIndexOf(":")+1, msg.length());
-                String pNumber = msg.substring(0,msg.lastIndexOf(":"));
-
-                //Add it to the list or do whatever you wish to
-                Toast.makeText(getApplicationContext(), pNumber + ": " + body, Toast.LENGTH_LONG).show();
-
-                // If text received is the welcome text from Twitter, proceed with name registration
-                mWaitingDialog.dismiss();
-                mWaitingDialog.cancel();
-
-                // After registration, take user to the main screen
-                Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(myIntent);
-            }
-        };
-        this.registerReceiver(mIntentReceiver, intentFilter);
+        //Temp place to put it
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) //Greater than JB
+        {
+            Intent sendIntent = new Intent(Intent.ACTION_SEND);
+            sendIntent.setType("text/plain");
+            sendIntent.putExtra(Intent.EXTRA_TEXT, "");
+            startActivity(sendIntent);
+        }
+        else //earlier versions
+        {
+            Intent smsIntent = new Intent(Intent.ACTION_VIEW);
+            smsIntent.setType("vnd.android-dir/mms-sms");
+            smsIntent.putExtra("address", SMSHelpers.TWITTER_SHORTCODE);
+            smsIntent.putExtra("sms_body","");
+            startActivity(smsIntent);
+        }
 	}
 }
