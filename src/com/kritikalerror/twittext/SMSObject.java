@@ -16,6 +16,7 @@ public class SMSObject {
     public String address;
     public String date;
     public String text;
+    public String original;
 
     // Lazy instantiation constructor
     public SMSObject()
@@ -25,9 +26,10 @@ public class SMSObject {
         address = "0";
         date = "0";
         text = "";
+        original = "";
     }
 
-    public SMSObject(String id, String address, String date, String text)
+    public SMSObject(String id, String address, String date, String text, String original)
     {
         String tempText = text.trim();
 
@@ -47,6 +49,7 @@ public class SMSObject {
         this.address = tempText.substring(0, index);
         this.date = convertDate(date);
         this.text = tempText.substring(index + 2, tempText.length());
+        this.original = original;
     }
 
     private String convertDate(String inDate) {

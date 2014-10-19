@@ -40,8 +40,8 @@ public class HomeFragment extends Fragment {
         subsView = (ListView) rootView.findViewById(R.id.subscriptionList);
 
         // Set search params
-        Uri inboxURI = Uri.parse("content://sms/inbox");
-        String[] reqCols = new String[] { "_id", "address", "date", "body" };
+        final Uri inboxURI = Uri.parse("content://sms/inbox");
+        final String[] reqCols = new String[] { "_id", "address", "date", "body" };
         String[] filter = new String[] { "%" + SMSHelpers.TWITTER_SHORTCODE + "%" };
 
         // Get Content Resolver object, which will deal with Content Provider
@@ -80,7 +80,8 @@ public class HomeFragment extends Fragment {
                     smsArray.add(new SMSObject(cursor.getString(0), //id
                             cursor.getString(1), //address
                             cursor.getString(2), //date
-                            theText)); //text
+                            theText, //text
+                            cursor.getString(3).trim())); //original text
                 }
             }
         }
@@ -94,43 +95,89 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
                 final SMSObject selectedSMS = (SMSObject) parent.getItemAtPosition(position);
-                //Toast.makeText(viewContext, "You selected: " + selectedSMS.address + ", " + selectedSMS.text, Toast.LENGTH_LONG).show();
+                String[] filter = new String[] { "%" + SMSHelpers.TWITTER_SHORTCODE + "%", "%" + selectedSMS.address + "%" };
 
-                final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-                builder.setTitle("Tweet Options")
-                        .setItems(new CharSequence[] {"Reply", "Retweet", "Favorite", "Unfollow", "Block", "Report"},
-                                new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
-                                // The 'which' argument contains the index position
-                                // of the selected item
-                                switch(which) {
-                                    case 0:
-                                        SMSHelpers.sendDialogSMS(viewContext, getActivity(), SMSHelpers.REPLY);
-                                        break;
-                                    case 1:
-                                        Toast.makeText(viewContext, "Not implemented yet, coming soon!", Toast.LENGTH_LONG).show();
-                                        //SMSHelpers.sendDialogSMS(viewContext, getActivity(), SMSHelpers.RETWEET);
-                                        break;
-                                    case 2:
-                                        Toast.makeText(viewContext, "Not implemented yet, coming soon!", Toast.LENGTH_LONG).show();
-                                        //SMSHelpers.sendDialogSMS(viewContext, getActivity(), SMSHelpers.FAVORITE);
-                                        break;
-                                    case 3:
-                                        SMSHelpers.sendHiddenSMS(viewContext, "UNFOLLOW " + selectedSMS.address);
-                                        break;
-                                    case 4:
-                                        SMSHelpers.sendHiddenSMS(viewContext, "BLOCK " + selectedSMS.address);
-                                        break;
-                                    case 5:
-                                        SMSHelpers.sendHiddenSMS(viewContext, "REPORT " + selectedSMS.address);
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                        });
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
+                ContentResolver smsTemp = viewContext.getContentResolver();
+                Cursor tempCursor = smsTemp.query(inboxURI, reqCols, "address LIKE ? AND body LIKE ?", filter, null);
+                tempCursor.moveToFirst();
+
+                if(tempCursor.getString(3).trim().contains(selectedSMS.original))
+                {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("Tweet Options")
+                            .setItems(new CharSequence[]{"View Profile", "Reply", "Retweet", "Favorite", "Unfollow", "Leave", "Block", "Report"},
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // The 'which' argument contains the index position
+                                            // of the selected item
+                                            switch (which) {
+                                                case 0:
+                                                    //
+                                                    break;
+                                                case 1:
+                                                    SMSHelpers.sendDialogSMS(viewContext, getActivity(), SMSHelpers.REPLY);
+                                                    break;
+                                                case 2:
+                                                    SMSHelpers.sendHiddenSMS(viewContext, "RETWEET " + selectedSMS.address);
+                                                    break;
+                                                case 3:
+                                                    SMSHelpers.sendHiddenSMS(viewContext, "FAVORITE " + selectedSMS.address);
+                                                    break;
+                                                case 4:
+                                                    SMSHelpers.sendHiddenSMS(viewContext, "UNFOLLOW " + selectedSMS.address);
+                                                    break;
+                                                case 5:
+                                                    SMSHelpers.sendHiddenSMS(viewContext, "LEAVE " + selectedSMS.address);
+                                                    break;
+                                                case 6:
+                                                    SMSHelpers.sendHiddenSMS(viewContext, "BLOCK " + selectedSMS.address);
+                                                    break;
+                                                case 7:
+                                                    SMSHelpers.sendHiddenSMS(viewContext, "REPORT " + selectedSMS.address);
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        }
+                                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }
+                else {
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("Tweet Options")
+                            .setItems(new CharSequence[]{"View Profile", "Reply", "Unfollow", "Leave", "Block", "Report"},
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // The 'which' argument contains the index position
+                                            // of the selected item
+                                            switch (which) {
+                                                case 0:
+                                                    //
+                                                    break;
+                                                case 1:
+                                                    SMSHelpers.sendDialogSMS(viewContext, getActivity(), SMSHelpers.REPLY);
+                                                    break;
+                                                case 2:
+                                                    SMSHelpers.sendHiddenSMS(viewContext, "UNFOLLOW " + selectedSMS.address);
+                                                    break;
+                                                case 3:
+                                                    SMSHelpers.sendHiddenSMS(viewContext, "LEAVE " + selectedSMS.address);
+                                                    break;
+                                                case 4:
+                                                    SMSHelpers.sendHiddenSMS(viewContext, "BLOCK " + selectedSMS.address);
+                                                    break;
+                                                case 5:
+                                                    SMSHelpers.sendHiddenSMS(viewContext, "REPORT " + selectedSMS.address);
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        }
+                                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }
             }
         });
     }
