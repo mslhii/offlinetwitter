@@ -41,11 +41,8 @@ public class LoginActivity extends Activity {
 	    
 	    final Button registerButton = (Button) findViewById(R.id.register); 
 	    registerButton.setOnClickListener(new View.OnClickListener() {
-	        public void onClick(View view) { 
-
+	        public void onClick(View view) {
                 register();
-                Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(myIntent);
 	        }
 	    });
 
@@ -102,10 +99,8 @@ public class LoginActivity extends Activity {
         try {
             SmsManager smsManager = SmsManager.getDefault();
             smsManager.sendTextMessage(SMSHelpers.TWITTER_SHORTCODE, null, "START", null, null);
-            Toast.makeText(getApplicationContext(), "Sent the request!",
-                    Toast.LENGTH_LONG).show();
 
-            AlertDialog.Builder builder1 = new AlertDialog.Builder(getApplicationContext());
+            AlertDialog.Builder builder1 = new AlertDialog.Builder(LoginActivity.this);
             builder1.setTitle("Please register using Messaging app");
             builder1.setMessage("Register using the Messaging app. When you are finished, press the back button.");
             builder1.setCancelable(true);
@@ -117,7 +112,7 @@ public class LoginActivity extends Activity {
                                 Intent sendIntent = new Intent(Intent.ACTION_SEND);
                                 sendIntent.setType("text/plain");
                                 sendIntent.putExtra(Intent.EXTRA_TEXT, "");
-                                startActivity(sendIntent);
+                                startActivityForResult(sendIntent, 2);
                             }
                             else //earlier versions
                             {
@@ -125,7 +120,7 @@ public class LoginActivity extends Activity {
                                 smsIntent.setType("vnd.android-dir/mms-sms");
                                 smsIntent.putExtra("address", SMSHelpers.TWITTER_SHORTCODE);
                                 smsIntent.putExtra("sms_body","");
-                                startActivity(smsIntent);
+                                startActivityForResult(smsIntent, 2);
                             }
                             dialog.cancel();
                         }
@@ -139,6 +134,20 @@ public class LoginActivity extends Activity {
                     Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
-
 	}
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // If our requestcode matches, start mainactivity
+        if(requestCode == 2)
+        {
+            Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(myIntent);
+        }
+        Toast.makeText(getApplicationContext(), "request is not 2!",
+                Toast.LENGTH_LONG).show();
+    }
 }

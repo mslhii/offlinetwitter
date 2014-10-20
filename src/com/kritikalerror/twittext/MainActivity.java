@@ -9,7 +9,9 @@ import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.telephony.SmsManager;
@@ -23,8 +25,16 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private ViewPager mViewPager;
 	private TabsAdapter mAdapter;
 	private ActionBar mActionBar;
+
 	// Tab titles
 	private String[] mTabTitles = { "Home", "Discover", "Activity" };
+
+    private SharedPreferences mSettingsPrefs;
+    private boolean mDiscoverySetting = true;
+    private boolean mNotificationSetting = true;
+    private String mLanguageSetting = "English";
+
+    private int SETTINGS_RESULT = 1;
 
 	@SuppressLint("NewApi")
 	@Override
@@ -40,7 +50,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
 		mViewPager.setAdapter(mAdapter);
 		mActionBar.setHomeButtonEnabled(false);
-		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);		
+		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
+
+        mSettingsPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 
 		// Adding Tabs
 		for (String tab_name : mTabTitles) 
@@ -101,9 +113,9 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             case R.id.action_follow: //Follow user
                 SMSHelpers.sendDialogSMS(getApplicationContext(), MainActivity.this, R.id.action_follow);
                 return super.onOptionsItemSelected(item);
-            case R.id.action_profile: //Send Tweet
-                Intent myIntent = new Intent(MainActivity.this, ProfileActivity.class);
-                startActivity(myIntent);
+            case R.id.action_profile: //View Profile
+                Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
+                startActivity(profileIntent);
                 return super.onOptionsItemSelected(item);
             case R.id.action_search: //Search tweets and/or users
                 Toast.makeText(getApplicationContext(), "Not implemented yet, coming soon!", Toast.LENGTH_LONG).show();
@@ -111,9 +123,63 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             case R.id.action_exit: //Stops all subscriptions and exits to Login Page
                 SMSHelpers.sendHiddenSMS(getApplicationContext(), "OFF");
                 return super.onOptionsItemSelected(item);
+            case R.id.action_settings:
+                // Store settings before they are changed
+                mLanguageSetting = mSettingsPrefs.getString("language", "NULL");
+                mDiscoverySetting = mSettingsPrefs.getBoolean("discovery", false);
+                mNotificationSetting = mSettingsPrefs.getBoolean("onoff", false);
+                Intent settingsIntent = new Intent(MainActivity.this, SettingsActivity.class);
+                startActivityForResult(settingsIntent, SETTINGS_RESULT);
+                return super.onOptionsItemSelected(item);
             default:
                 Toast.makeText(getApplicationContext(), item.getItemId(), Toast.LENGTH_LONG).show();
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == SETTINGS_RESULT)
+        {
+            // Test code
+            String test = "Language: " + mSettingsPrefs.getString("language", "NULL") + " ";
+            if(!mLanguageSetting.equals(mSettingsPrefs.getString("language", "NULL"))) {
+                SMSHelpers.sendHiddenSMS(getApplicationContext(), "SET LANGUAGE " + mSettingsPrefs.getString("language", "NULL"));
+            }
+            if(mSettingsPrefs.getBoolean("discovery", false))
+            {
+                test = test + "Discovery: true ";
+                if(mDiscoverySetting != mSettingsPrefs.getBoolean("discovery", false)) {
+                    SMSHelpers.sendHiddenSMS(getApplicationContext(), "SET DISCOVERY ON");
+                }
+            }
+            else
+            {
+                test = test + "Discovery: false ";
+                if(mDiscoverySetting != mSettingsPrefs.getBoolean("discovery", false)) {
+                    SMSHelpers.sendHiddenSMS(getApplicationContext(), "SET DISCOVERY OFF");
+                }
+            }
+            if(mSettingsPrefs.getBoolean("onoff", false))
+            {
+                test = test + "On/Off: true";
+                if(mNotificationSetting != mSettingsPrefs.getBoolean("onoff", false)) {
+                    SMSHelpers.sendHiddenSMS(getApplicationContext(), "ON");
+                }
+            }
+            else
+            {
+                test = test + "On/Off: false";
+                if(mNotificationSetting != mSettingsPrefs.getBoolean("onoff", false)) {
+                    SMSHelpers.sendHiddenSMS(getApplicationContext(), "OFF");
+                }
+            }
+            Toast.makeText(getApplicationContext(),
+                    test,
+                    Toast.LENGTH_LONG).show();
+        }
+
     }
 }
