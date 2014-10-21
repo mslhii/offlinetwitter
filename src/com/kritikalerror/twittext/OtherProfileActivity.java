@@ -100,6 +100,11 @@ public class OtherProfileActivity extends Activity {
                 // Retrieve relevant Twitter SMSes through query
                 Cursor cursor = smsRetrieve.query(inboxURI, reqCols, "address LIKE ?", filter, null);
 
+                if(cursor == null)
+                {
+                    break;
+                }
+
                 // Check to see if SMSes we have are from the correct Tweeter
                 String temp = "";
                 String shortAddr = address.replace("@", "");

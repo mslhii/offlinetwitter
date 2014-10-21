@@ -100,9 +100,11 @@ public class LoginActivity extends Activity {
                         {
                             //String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(LoginActivity.this);
 
+                            Toast.makeText(getApplicationContext(), "KitKat redirecting...", Toast.LENGTH_LONG).show();
+
                             Intent sendIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + Uri.encode(SMSHelpers.TWITTER_SHORTCODE)));
                             sendIntent.setType("text/plain");
-                            sendIntent.putExtra(Intent.EXTRA_TEXT, "START");
+                            sendIntent.putExtra("sms_body", "START");
                             startActivityForResult(sendIntent, BACK_RESULT);
                         } else //earlier versions
                         {
