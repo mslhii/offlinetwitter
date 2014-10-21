@@ -143,42 +143,33 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 
         if(requestCode == SETTINGS_RESULT)
         {
-            // Test code
-            String test = "Language: " + mSettingsPrefs.getString("language", "NULL") + " ";
             if(!mLanguageSetting.equals(mSettingsPrefs.getString("language", "NULL"))) {
                 SMSHelpers.sendHiddenSMS(getApplicationContext(), "SET LANGUAGE " + mSettingsPrefs.getString("language", "NULL"));
             }
             if(mSettingsPrefs.getBoolean("discovery", false))
             {
-                test = test + "Discovery: true ";
                 if(mDiscoverySetting != mSettingsPrefs.getBoolean("discovery", false)) {
                     SMSHelpers.sendHiddenSMS(getApplicationContext(), "SET DISCOVERY ON");
                 }
             }
             else
             {
-                test = test + "Discovery: false ";
                 if(mDiscoverySetting != mSettingsPrefs.getBoolean("discovery", false)) {
                     SMSHelpers.sendHiddenSMS(getApplicationContext(), "SET DISCOVERY OFF");
                 }
             }
             if(mSettingsPrefs.getBoolean("onoff", false))
             {
-                test = test + "On/Off: true";
                 if(mNotificationSetting != mSettingsPrefs.getBoolean("onoff", false)) {
                     SMSHelpers.sendHiddenSMS(getApplicationContext(), "ON");
                 }
             }
             else
             {
-                test = test + "On/Off: false";
                 if(mNotificationSetting != mSettingsPrefs.getBoolean("onoff", false)) {
                     SMSHelpers.sendHiddenSMS(getApplicationContext(), "OFF");
                 }
             }
-            Toast.makeText(getApplicationContext(),
-                    test,
-                    Toast.LENGTH_LONG).show();
         }
 
     }

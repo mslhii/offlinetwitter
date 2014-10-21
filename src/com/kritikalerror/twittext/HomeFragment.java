@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -76,7 +77,9 @@ public class HomeFragment extends Fragment {
                     theText = theText + tempSpliceText;
                     needsJoin = false;
                 }
-                if(cursor.getString(3).contains(": ")) {
+
+                // Do not want any other messages from Twitter
+                if(cursor.getString(3).contains(": ") && cursor.getString(3).contains("@")) {
                     smsArray.add(new SMSObject(cursor.getString(0), //id
                             cursor.getString(1), //address
                             cursor.getString(2), //date
@@ -97,6 +100,7 @@ public class HomeFragment extends Fragment {
                 final SMSObject selectedSMS = (SMSObject) parent.getItemAtPosition(position);
                 String[] filter = new String[] { "%" + SMSHelpers.TWITTER_SHORTCODE + "%", "%" + selectedSMS.address + "%" };
 
+                // Check to see if Tweet is latest or not
                 ContentResolver smsTemp = viewContext.getContentResolver();
                 Cursor tempCursor = smsTemp.query(inboxURI, reqCols, "address LIKE ? AND body LIKE ?", filter, null);
                 tempCursor.moveToFirst();
@@ -105,14 +109,16 @@ public class HomeFragment extends Fragment {
                 {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("Tweet Options")
-                            .setItems(new CharSequence[]{"View Profile", "Reply", "Retweet", "Favorite", "Unfollow", "Leave", "Block", "Report"},
+                            .setItems(new CharSequence[]{"View Profile", "Reply", "Retweet", "Favorite", "Report"},
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
                                             // The 'which' argument contains the index position
                                             // of the selected item
                                             switch (which) {
                                                 case 0:
-                                                    //
+                                                    Intent profileIntent = new Intent(getActivity(), OtherProfileActivity.class);
+                                                    profileIntent.putExtra("address", selectedSMS.address);
+                                                    startActivity(profileIntent);
                                                     break;
                                                 case 1:
                                                     SMSHelpers.sendDialogSMS(viewContext, getActivity(), SMSHelpers.REPLY);
@@ -146,14 +152,16 @@ public class HomeFragment extends Fragment {
                 else {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("Tweet Options")
-                            .setItems(new CharSequence[]{"View Profile", "Reply", "Unfollow", "Leave", "Block", "Report"},
+                            .setItems(new CharSequence[]{"View Profile", "Reply", "Report"},
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
                                             // The 'which' argument contains the index position
                                             // of the selected item
                                             switch (which) {
                                                 case 0:
-                                                    //
+                                                    Intent profileIntent = new Intent(getActivity(), OtherProfileActivity.class);
+                                                    profileIntent.putExtra("address", selectedSMS.address);
+                                                    startActivity(profileIntent);
                                                     break;
                                                 case 1:
                                                     SMSHelpers.sendDialogSMS(viewContext, getActivity(), SMSHelpers.REPLY);

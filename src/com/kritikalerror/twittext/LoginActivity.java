@@ -1,14 +1,7 @@
 package com.kritikalerror.twittext;
 
-
-import java.util.ArrayList;
-
 import android.app.AlertDialog;
-import android.app.ProgressDialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.IntentFilter;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,9 +14,10 @@ import android.widget.Toast;
 import android.app.Activity;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.database.Cursor;
 
 public class LoginActivity extends Activity {
+
+    private final int BACK_RESULT = 2;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -95,45 +89,45 @@ public class LoginActivity extends Activity {
      * Register is a function that handles user registration with Twitter
      */
 	private void register() {
-        //Kick things off by sending the START sms
-        try {
-            SmsManager smsManager = SmsManager.getDefault();
-            smsManager.sendTextMessage(SMSHelpers.TWITTER_SHORTCODE, null, "START", null, null);
+        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+        builder.setTitle("Please register using Messaging app");
+        builder.setMessage("Register using the Messaging app. Follow the instructions that Twitter sends you. When you are finished, press the back button.");
+        builder.setCancelable(true);
+        builder.setNegativeButton("OK",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) //Greater than JB
+                        {
+                            //String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(LoginActivity.this);
 
-            AlertDialog.Builder builder1 = new AlertDialog.Builder(LoginActivity.this);
-            builder1.setTitle("Please register using Messaging app");
-            builder1.setMessage("Register using the Messaging app. When you are finished, press the back button.");
-            builder1.setCancelable(true);
-            builder1.setNegativeButton("OK",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) //Greater than JB
-                            {
-                                Intent sendIntent = new Intent(Intent.ACTION_SEND);
-                                sendIntent.setType("text/plain");
-                                sendIntent.putExtra(Intent.EXTRA_TEXT, "");
-                                startActivityForResult(sendIntent, 2);
+                            Intent sendIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + Uri.encode(SMSHelpers.TWITTER_SHORTCODE)));
+                            sendIntent.setType("text/plain");
+                            sendIntent.putExtra(Intent.EXTRA_TEXT, "START");
+                            startActivityForResult(sendIntent, BACK_RESULT);
+                        } else //earlier versions
+                        {
+                            try {
+                                SmsManager smsManager = SmsManager.getDefault();
+                                smsManager.sendTextMessage(SMSHelpers.TWITTER_SHORTCODE, null, "START", null, null);
+                            } catch (Exception e) {
+                                Toast.makeText(getApplicationContext(),
+                                        "Request failed, please try again later!",
+                                        Toast.LENGTH_LONG).show();
+                                e.printStackTrace();
                             }
-                            else //earlier versions
-                            {
-                                Intent smsIntent = new Intent(Intent.ACTION_VIEW);
-                                smsIntent.setType("vnd.android-dir/mms-sms");
-                                smsIntent.putExtra("address", SMSHelpers.TWITTER_SHORTCODE);
-                                smsIntent.putExtra("sms_body","");
-                                startActivityForResult(smsIntent, 2);
-                            }
-                            dialog.cancel();
+
+                            Intent smsIntent = new Intent(Intent.ACTION_VIEW);
+                            smsIntent.setType("vnd.android-dir/mms-sms");
+                            smsIntent.putExtra("address", SMSHelpers.TWITTER_SHORTCODE);
+                            smsIntent.putExtra("sms_body", "");
+                            startActivityForResult(smsIntent, BACK_RESULT);
                         }
-                    });
+                        dialog.cancel();
+                    }
+                });
 
-            AlertDialog alert11 = builder1.create();
-            alert11.show();
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(),
-                    "Request failed, please try again later!",
-                    Toast.LENGTH_LONG).show();
-            e.printStackTrace();
-        }
+        AlertDialog alert = builder.create();
+        alert.show();
 	}
 
     @Override
@@ -142,12 +136,10 @@ public class LoginActivity extends Activity {
         super.onActivityResult(requestCode, resultCode, data);
 
         // If our requestcode matches, start mainactivity
-        if(requestCode == 2)
+        if(requestCode == BACK_RESULT)
         {
             Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(myIntent);
         }
-        Toast.makeText(getApplicationContext(), "request is not 2!",
-                Toast.LENGTH_LONG).show();
     }
 }
