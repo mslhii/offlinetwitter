@@ -54,12 +54,14 @@ public class HomeFragment extends Fragment {
 
         // Change cursor so that we get subscriptions from the results
         String tempSpliceText = "";
+        String tempText = "";
         boolean needsJoin = false;
+        String theText = "";
         if (cursor.moveToFirst()) {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
 
-                String tempText = cursor.getString(3).trim();
+                tempText = cursor.getString(3).trim();
 
                 // Check for 2/2 tweets first so we can join text together
                 int secondTextIDX = tempText.indexOf("2/2: ");
@@ -71,15 +73,15 @@ public class HomeFragment extends Fragment {
                 }
 
                 // We only want texts that start with @xxx: format for
-                String theText = cursor.getString(3).trim();
+                theText = cursor.getString(3).trim();
                 if(needsJoin)
                 {
                     theText = theText + tempSpliceText;
                     needsJoin = false;
                 }
 
-                // Do not want any other messages from Twitter
-                if(cursor.getString(3).contains(": ") && cursor.getString(3).contains("@")) {
+                // Do not want any other messages from Twitter, needs to match @xxx: format
+                if(cursor.getString(3).matches("(.*)@(.*): (.*)")) {
                     smsArray.add(new SMSObject(cursor.getString(0), //id
                             cursor.getString(1), //address
                             cursor.getString(2), //date

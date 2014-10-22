@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by Michael on 10/20/2014.
@@ -100,6 +101,7 @@ public class OtherProfileActivity extends Activity {
                 // Retrieve relevant Twitter SMSes through query
                 Cursor cursor = smsRetrieve.query(inboxURI, reqCols, "address LIKE ?", filter, null);
 
+                // Fixes nullpointerexception?
                 if(cursor == null)
                 {
                     break;
@@ -108,21 +110,41 @@ public class OtherProfileActivity extends Activity {
                 // Check to see if SMSes we have are from the correct Tweeter
                 String temp = "";
                 String shortAddr = address.replace("@", "");
+                String tempText = "";
+                String theText = "";
+                boolean needsJoin = false;
                 if (cursor.moveToFirst()) {
                     for (int i = 0; i < cursor.getCount(); i++) {
                         cursor.moveToPosition(i);
 
-                        temp = cursor.getString(3);
+                        temp = cursor.getString(3).trim();
+
+                        int secondTextIDX = tempText.indexOf("2/2: ");
+                        if(secondTextIDX != -1) {
+                            tempText = temp.substring(secondTextIDX + 5, temp.length());
+                            needsJoin = true;
+                            cursor.move(1);
+                            i++;
+                        }
 
                         if(temp.contains("Followers: "))
                         {
-                            result[1] = temp;
+                            result[1] = temp.trim();
                             hasStats = true;
                         }
 
                         if(temp.contains(shortAddr + ", since"))
                         {
-                            result[0] = temp;
+                            if(needsJoin)
+                            {
+                                theText = cursor.getString(3).trim();
+                                theText = theText + tempText;
+                                needsJoin = false;
+                                result[0] = theText.trim();
+                            }
+                            else {
+                                result[0] = temp.trim();
+                            }
                             hasWHOIS = true;
                         }
                     }
@@ -158,6 +180,26 @@ public class OtherProfileActivity extends Activity {
         @Override
         protected void onPostExecute(String[] sms) {
             super.onPostExecute(sms);
+
+            String[] whoisString = sms[1].split("Reply");
+
+            mFollowers.setText(whoisString[0]);
+            mUserName.setText(whoisString[1].substring(whoisString[1].indexOf("@"), whoisString[1].indexOf(" to")));
+
+            Toast.makeText(getApplicationContext(), sms[0], Toast.LENGTH_LONG).show();
+
+            // Get Profile Name first
+            mRealName.setText(sms[0].substring(0, sms[0].indexOf(",") - 1));
+
+            // Get Since When
+            mSinceWhen.setText(sms[0].substring(sms[0].indexOf(","), sms[0].indexOf(".")));
+
+            // Get Bio if any
+            int bioIndex = sms[0].indexOf("Bio: ");
+            if(bioIndex != -1)
+            {
+                mBio.setText(sms[0].substring(bioIndex, sms[0].length()).replace(' ', '\n'));
+            }
 
             mDownloadProgress.cancel();
         }
