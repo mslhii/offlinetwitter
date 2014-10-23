@@ -94,7 +94,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
         // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.main, menu);
-        menu.findItem(R.id.action_search).getActionView();
+        //menu.findItem(R.id.action_search).getActionView();
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -117,9 +117,10 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                 Intent profileIntent = new Intent(MainActivity.this, ProfileActivity.class);
                 startActivity(profileIntent);
                 return super.onOptionsItemSelected(item);
-            case R.id.action_search: //Search tweets and/or users
-                Toast.makeText(getApplicationContext(), "Not implemented yet, coming soon!", Toast.LENGTH_LONG).show();
-                return super.onOptionsItemSelected(item);
+            //case R.id.action_search: //Search tweets and/or users
+                //TODO: not implementing this for now
+            //    Toast.makeText(getApplicationContext(), "Not implemented yet, coming soon!", Toast.LENGTH_LONG).show();
+            //    return super.onOptionsItemSelected(item);
             case R.id.action_exit: //Stops all subscriptions and exits to Login Page
                 SMSHelpers.sendHiddenSMS(getApplicationContext(), "OFF");
                 return super.onOptionsItemSelected(item);
