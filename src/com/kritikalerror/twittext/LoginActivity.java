@@ -37,6 +37,7 @@ public class LoginActivity extends Activity {
 	        	Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
 	        	//myIntent.putExtra("key", value); //implement login stuff later
 	        	startActivity(myIntent);
+                finish();
 	        }
 	    });
 	    
@@ -106,6 +107,7 @@ public class LoginActivity extends Activity {
         {
             Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(myIntent);
+            finish();
         }
     }
 

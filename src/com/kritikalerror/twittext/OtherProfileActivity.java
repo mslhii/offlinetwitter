@@ -24,8 +24,6 @@ public class OtherProfileActivity extends Activity {
     private TextView mSinceWhen;
     private TextView mFollowers;
     private TextView mBio;
-    private TextView mLocation;
-    private TextView mWeb;
 
     protected ProgressDialog mDownloadProgress;
 
@@ -39,8 +37,6 @@ public class OtherProfileActivity extends Activity {
         mSinceWhen = (TextView) findViewById(R.id.whois);
         mFollowers = (TextView) findViewById(R.id.follow);
         mBio = (TextView) findViewById(R.id.otherbio);
-        mLocation = (TextView) findViewById(R.id.otherloc);
-        mWeb = (TextView) findViewById(R.id.otherweb);
 
         // Retrieve address from past activity
         Intent intent = getIntent();
@@ -150,6 +146,9 @@ public class OtherProfileActivity extends Activity {
                     }
                 }
             }
+            // Reset the two flags to make sure we can get future texts?
+            hasWHOIS = false;
+            hasStats = false;
 
             //temp comment to aid in parsing
             //40404: 2/2: . Location: San Francisco Web: http://t.co/NajCuIAUyl/s/t6aD
@@ -189,16 +188,18 @@ public class OtherProfileActivity extends Activity {
             Toast.makeText(getApplicationContext(), sms[0], Toast.LENGTH_LONG).show();
 
             // Get Profile Name first
-            mRealName.setText(sms[0].substring(0, sms[0].indexOf(",") - 1));
+            mRealName.setText(sms[0].substring(0, sms[0].indexOf(",")));
 
             // Get Since When
             mSinceWhen.setText(sms[0].substring(sms[0].indexOf(","), sms[0].indexOf(".")));
 
             // Get Bio if any
             int bioIndex = sms[0].indexOf("Bio: ");
+            int webIndex = sms[0].indexOf("Web: ");
+            int locIndex = sms[0].indexOf("Location: ");
             if(bioIndex != -1)
             {
-                mBio.setText(sms[0].substring(bioIndex, sms[0].length()).replace(' ', '\n'));
+                mBio.setText(sms[0].substring(bioIndex, sms[0].length()));
             }
 
             mDownloadProgress.cancel();
