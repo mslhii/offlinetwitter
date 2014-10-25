@@ -27,7 +27,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private ActionBar mActionBar;
 
 	// Tab titles
-	private String[] mTabTitles = { "Home", "Discover", "Activity" };
+	private String[] mTabTitles = { "Home", "Messages", "Discover" };
 
     private SharedPreferences mSettingsPrefs;
     private boolean mDiscoverySetting = true;

@@ -81,7 +81,8 @@ public class HomeFragment extends Fragment {
                 }
 
                 // Do not want any other messages from Twitter, needs to match @xxx: format
-                if(cursor.getString(3).matches("(.*)@(.*): (.*)")) {
+                if(cursor.getString(3).matches("(.*)@(.*): (.*)") &&
+                        !(cursor.getString(3).matches("(.*)Direct from @(.*): (.*)"))) {
                     smsArray.add(new SMSObject(cursor.getString(0), //id
                             cursor.getString(1), //address
                             cursor.getString(2), //date

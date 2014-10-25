@@ -45,13 +45,14 @@ public class ActivityFragment extends Fragment {
         ContentResolver smsRetrieve = viewContext.getContentResolver();
 
         // Retrieve relevant Twitter SMSes through query
-        Cursor cursor = smsRetrieve.query(inboxURI, reqCols, "address LIKE ?", filter, null);
+        Cursor cursor = smsRetrieve.query(inboxURI, reqCols, null, null, null);
 
         // Change cursor so that we get subscriptions from the results
         if (cursor.moveToFirst()) {
             //String str = cursor.getString(cursor.getColumnIndex("text"));
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
+
                 Log.e("TEST", "id: " + cursor.getString(0));
                 Log.e("TEST", "address: " + cursor.getString(1));
                 Log.e("TEST", "date: " + cursor.getString(2));
@@ -66,3 +67,17 @@ public class ActivityFragment extends Fragment {
     }
 
 }
+
+/*
+// Create Inbox box URI
+        Uri inboxURI = Uri.parse("content://sms/inbox");
+
+        // List required columns
+        String[] reqCols = new String[] { "_id", "address", "body" };
+
+        // Get Content Resolver object, which will deal with Content Provider
+        ContentResolver cr = viewContext.getContentResolver();
+
+        // Fetch Inbox SMS Message from Built-in Content Provider
+        Cursor c = cr.query(inboxURI, reqCols, null, null, null);
+ */

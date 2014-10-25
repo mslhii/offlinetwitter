@@ -29,6 +29,24 @@ public class SMSObject {
         original = "";
     }
 
+    // Constructor for messages
+    public SMSObject(String id, String address, String date, String original)
+    {
+        // Get the name of the user who wrote that tweet
+        int addressIndex = original.indexOf("Direct from ");
+        int index = original.indexOf(": ");
+        int endIndex = original.indexOf("To reply, type '");
+        Log.e("TEST", String.valueOf(index));
+
+        this._id = id;
+        this.shortcode = address;
+        this.address = original.substring(addressIndex + 12, index);
+        this.date = convertDate(date);
+        this.text = original.substring(index + 2, endIndex);
+        this.original = original;
+    }
+
+    // Constructor for tweets
     public SMSObject(String id, String address, String date, String text, String original)
     {
         String tempText = text.trim();

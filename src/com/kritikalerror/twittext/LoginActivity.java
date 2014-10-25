@@ -154,6 +154,22 @@ public class LoginActivity extends Activity {
         values.put("address", SMSHelpers.TWITTER_SHORTCODE);
         values.put("body", "2/2: /J079BnCQxJ/s/mG1X");
         getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
+        values = new ContentValues();
+        values.put("address", SMSHelpers.TWITTER_SHORTCODE);
+        values.put("body", "Followers: 802,507 Following: 280 Reply w/ WHOIS @CNET to view profile.");
+        getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
+        values = new ContentValues();
+        values.put("address", SMSHelpers.TWITTER_SHORTCODE);
+        values.put("body", "1/2: CNET, since Apr 2009. Bio: CNET is the premier destination for tech product reviews, news, price comparisons, free");
+        getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
+        values = new ContentValues();
+        values.put("address", SMSHelpers.TWITTER_SHORTCODE);
+        values.put("body", "2/2: . Location: San Francisco Web: http://t.co/NajCuIAUyl/s/t6aD");
+        getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
+        values = new ContentValues();
+        values.put("address", SMSHelpers.TWITTER_SHORTCODE);
+        values.put("body", "Direct from @ListCraigs66: again To reply, type 'DM @ListCraigs66 [your message]' m.twitter.com/messages");
+        getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
 
         Toast.makeText(getApplicationContext(), "Populated fake SMS into inbox!", Toast.LENGTH_LONG).show();
 
