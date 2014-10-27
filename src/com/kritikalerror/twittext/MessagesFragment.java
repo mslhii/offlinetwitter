@@ -52,6 +52,7 @@ public class MessagesFragment extends Fragment {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
 
+                //TODO: change to get latest in thread only
                 if (cursor.getString(3).matches("(.*)Direct from @(.*): (.*)")) {
                     smsArray.add(new SMSObject(cursor.getString(0), //id
                             cursor.getString(1), //address

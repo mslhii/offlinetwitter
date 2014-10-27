@@ -71,7 +71,8 @@ public class LoginActivity extends Activity {
                             sendIntent.setType("text/plain");
                             sendIntent.putExtra("sms_body", "START");
                             startActivityForResult(sendIntent, BACK_RESULT);
-                        } else //earlier versions
+                        }
+                        else //earlier versions
                         {
                             try {
                                 SmsManager smsManager = SmsManager.getDefault();

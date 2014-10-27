@@ -123,7 +123,7 @@ public class OtherProfileActivity extends Activity {
                             i++;
                         }
 
-                        if(temp.contains("Followers: "))
+                        if(temp.contains("Followers: ") && temp.contains(shortAddr))
                         {
                             result[1] = temp.trim();
                             hasStats = true;
@@ -186,6 +186,7 @@ public class OtherProfileActivity extends Activity {
             mUserName.setText(whoisString[1].substring(whoisString[1].indexOf("@"), whoisString[1].indexOf(" to")));
 
             Toast.makeText(getApplicationContext(), sms[0], Toast.LENGTH_LONG).show();
+            Toast.makeText(getApplicationContext(), sms[1], Toast.LENGTH_LONG).show();
 
             // Get Profile Name first
             mRealName.setText(sms[0].substring(0, sms[0].indexOf(",")));
