@@ -32,6 +32,9 @@ public class OtherProfileActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_otherprofile);
 
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayShowTitleEnabled(false);
+
         mUserName = (TextView) findViewById(R.id.profileusername);
         mRealName = (TextView) findViewById(R.id.profilename);
         mSinceWhen = (TextView) findViewById(R.id.whois);

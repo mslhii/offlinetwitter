@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -27,7 +28,10 @@ public class ViewMessageActivity extends Activity  {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewmessages);
 
-        threadView = (ListView) findViewById(R.id.messageList);
+        getActionBar().setDisplayHomeAsUpEnabled(true);
+        getActionBar().setDisplayShowTitleEnabled(false);
+
+        threadView = (ListView) findViewById(R.id.messagesList);
 
         // Set search params
         Uri inboxURI = Uri.parse("content://sms/inbox");
