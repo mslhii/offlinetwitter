@@ -118,18 +118,19 @@ public class OtherProfileActivity extends Activity {
 
                         temp = cursor.getString(3).trim();
 
-                        int secondTextIDX = tempText.indexOf("2/2: ");
+                        if(temp.contains("Followers: ") && temp.contains(shortAddr))
+                        {
+                            result[1] = temp.trim();
+                            hasStats = true;
+                        }
+
+                        int secondTextIDX = temp.indexOf("2/2: ");
                         if(secondTextIDX != -1) {
                             tempText = temp.substring(secondTextIDX + 5, temp.length());
                             needsJoin = true;
                             cursor.move(1);
                             i++;
-                        }
-
-                        if(temp.contains("Followers: ") && temp.contains(shortAddr))
-                        {
-                            result[1] = temp.trim();
-                            hasStats = true;
+                            temp = cursor.getString(3).trim();
                         }
 
                         if(temp.contains(shortAddr + ", since"))
@@ -188,19 +189,24 @@ public class OtherProfileActivity extends Activity {
             mFollowers.setText(whoisString[0]);
             mUserName.setText(whoisString[1].substring(whoisString[1].indexOf("@"), whoisString[1].indexOf(" to")));
 
-            Toast.makeText(getApplicationContext(), sms[0], Toast.LENGTH_LONG).show();
-            Toast.makeText(getApplicationContext(), sms[1], Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), sms[0], Toast.LENGTH_LONG).show();
+            //Toast.makeText(getApplicationContext(), sms[1], Toast.LENGTH_LONG).show();
 
             // Get Profile Name first
-            mRealName.setText(sms[0].substring(0, sms[0].indexOf(",")));
+            int prefixIndex = sms[0].indexOf("1/2: ");
+            if(prefixIndex == -1) {
+                mRealName.setText(sms[0].substring(0, sms[0].indexOf(",")));
+            }
+            else
+            {
+                mRealName.setText(sms[0].substring(prefixIndex + 5, sms[0].indexOf(",")));
+            }
 
             // Get Since When
-            mSinceWhen.setText(sms[0].substring(sms[0].indexOf(","), sms[0].indexOf(".")));
+            mSinceWhen.setText(sms[0].substring(sms[0].indexOf(",") + 2, sms[0].indexOf(".")));
 
-            // Get Bio if any
+            // Get Bio/Web/Location if any
             int bioIndex = sms[0].indexOf("Bio: ");
-            int webIndex = sms[0].indexOf("Web: ");
-            int locIndex = sms[0].indexOf("Location: ");
             if(bioIndex != -1)
             {
                 mBio.setText(sms[0].substring(bioIndex, sms[0].length()));
