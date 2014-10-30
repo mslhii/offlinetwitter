@@ -189,9 +189,6 @@ public class OtherProfileActivity extends Activity {
             mFollowers.setText(whoisString[0]);
             mUserName.setText(whoisString[1].substring(whoisString[1].indexOf("@"), whoisString[1].indexOf(" to")));
 
-            //Toast.makeText(getApplicationContext(), sms[0], Toast.LENGTH_LONG).show();
-            //Toast.makeText(getApplicationContext(), sms[1], Toast.LENGTH_LONG).show();
-
             // Get Profile Name first
             int prefixIndex = sms[0].indexOf("1/2: ");
             if(prefixIndex == -1) {

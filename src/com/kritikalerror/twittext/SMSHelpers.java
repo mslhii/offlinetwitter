@@ -83,6 +83,12 @@ public class SMSHelpers {
                 sendButton.setText("Follow");
                 actionString = "FOLLOW ";
                 break;
+            case R.id.action_message:
+                smsDialog.setTitle("Send Direct Message");
+                prepareTweet.setHint("<message recipient> <body>");
+                sendButton.setText("Send");
+                actionString = "D ";
+                break;
             case REPLY:
                 smsDialog.setTitle("Reply Tweeter");
                 prepareTweet.setHint("What's happening?");
@@ -92,6 +98,47 @@ public class SMSHelpers {
             default:
                 return false; //No appropriate action to take
         }
+
+        // Need final String due to inner class
+        final String paramString = actionString;
+
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO Auto-generated method stub
+                String tweetParams = paramString + prepareTweet.getText().toString();
+
+                try {
+                    SmsManager smsManager = SmsManager.getDefault();
+                    smsManager.sendTextMessage(TWITTER_SHORTCODE, null, tweetParams, null, null);
+                    Toast.makeText(context, "Sent the request!",
+                            Toast.LENGTH_LONG).show();
+                } catch (Exception e) {
+                    Toast.makeText(context,
+                            "Request failed, please try again later!",
+                            Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+
+                smsDialog.dismiss();
+            }
+        });
+        smsDialog.show();
+
+        return true;
+    }
+
+    public static boolean sendMessageSMS(final Context context, Activity activity, String sender) {
+        String actionString = "";
+        final Dialog smsDialog = new Dialog(activity);
+        smsDialog.setContentView(R.layout.sms_dialog);
+        final EditText prepareTweet = (EditText) smsDialog.findViewById(R.id.search);
+        Button sendButton = (Button) smsDialog.findViewById(R.id.saveBtn);
+
+        smsDialog.setTitle("Send Direct Message");
+        prepareTweet.setHint("Start a new message");
+        sendButton.setText("Send");
+        actionString = "D " + sender + " ";
 
         // Need final String due to inner class
         final String paramString = actionString;

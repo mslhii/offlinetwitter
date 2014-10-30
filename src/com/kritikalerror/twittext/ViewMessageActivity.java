@@ -7,6 +7,9 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -72,9 +75,28 @@ public class ViewMessageActivity extends Activity  {
             public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
                 final SMSObject selectedSMS = (SMSObject) parent.getItemAtPosition(position);
 
-
+                SMSHelpers.sendMessageSMS(getApplicationContext(), ViewMessageActivity.this, selectedSMS.address);
             }
 
         });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.messages, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_message:
+                SMSHelpers.sendDialogSMS(getApplicationContext(), ViewMessageActivity.this, R.id.action_message);
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }

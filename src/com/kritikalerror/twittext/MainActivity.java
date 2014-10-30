@@ -107,9 +107,6 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             case R.id.action_alert: //Send Tweet
                 Toast.makeText(getApplicationContext(), "Not implemented yet, coming soon!", Toast.LENGTH_LONG).show();
                 return super.onOptionsItemSelected(item);
-            case R.id.action_message: //Send Tweet
-                Toast.makeText(getApplicationContext(), "Not implemented yet, coming soon!", Toast.LENGTH_LONG).show();
-                return super.onOptionsItemSelected(item);
             case R.id.action_follow: //Follow user
                 SMSHelpers.sendDialogSMS(getApplicationContext(), MainActivity.this, R.id.action_follow);
                 return super.onOptionsItemSelected(item);
