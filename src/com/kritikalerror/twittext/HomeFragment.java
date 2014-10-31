@@ -108,7 +108,8 @@ public class HomeFragment extends Fragment {
                 Cursor tempCursor = smsTemp.query(inboxURI, reqCols, "address LIKE ? AND body LIKE ?", filter, null);
                 tempCursor.moveToFirst();
 
-                if(tempCursor.getString(3).trim().contains(selectedSMS.original))
+                if((tempCursor.getString(3).trim().contains(selectedSMS.original)) &&
+                        !(tempCursor.getString(3).trim().contains("Following: ")))
                 {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("Tweet Options")

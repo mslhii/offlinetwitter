@@ -2,7 +2,9 @@ package com.kritikalerror.twittext;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.Context;
+import android.net.Uri;
 import android.telephony.SmsManager;
 import android.view.View;
 import android.widget.Button;
@@ -167,5 +169,13 @@ public class SMSHelpers {
         smsDialog.show();
 
         return true;
+    }
+
+    public static void _addMessage(Context context, String message)
+    {
+        ContentValues values = new ContentValues();
+        values.put("address", SMSHelpers.TWITTER_SHORTCODE);
+        values.put("body", message);
+        context.getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
     }
 }

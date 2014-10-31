@@ -11,7 +11,7 @@ import java.util.Date;
 public class SMSObject {
 
     // Member variables
-    private String _id;
+    public String _id;
     public String shortcode;
     public String address;
     public String date;

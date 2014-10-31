@@ -1,10 +1,13 @@
 package com.kritikalerror.twittext;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -13,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -21,10 +25,12 @@ import java.util.ArrayList;
  */
 public class ViewMessageActivity extends Activity  {
 
-    ListView threadView;
-    SMSObjectAdapter adapter;
+    private ListView threadView;
+    private SMSObjectAdapter adapter;
 
-    final String TWITTER_SHORTCODE = "40404";
+    private final String TWITTER_SHORTCODE = "40404";
+    private final String TAG = "ViewMessageActivity";
+    private String mAddress = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +41,8 @@ public class ViewMessageActivity extends Activity  {
         getActionBar().setDisplayShowTitleEnabled(false);
 
         threadView = (ListView) findViewById(R.id.messagesList);
+
+        mAddress = getIntent().getExtras().getString("address");
 
         // Set search params
         Uri inboxURI = Uri.parse("content://sms/inbox");
@@ -75,7 +83,43 @@ public class ViewMessageActivity extends Activity  {
             public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
                 final SMSObject selectedSMS = (SMSObject) parent.getItemAtPosition(position);
 
-                SMSHelpers.sendMessageSMS(getApplicationContext(), ViewMessageActivity.this, selectedSMS.address);
+                final AlertDialog.Builder builder = new AlertDialog.Builder(ViewMessageActivity.this);
+                builder.setTitle("Message Options")
+                        .setItems(new CharSequence[]{"Reply", "Delete"},
+                                new DialogInterface.OnClickListener() {
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        // The 'which' argument contains the index position
+                                        // of the selected item
+                                        switch (which) {
+                                            case 0:
+                                                SMSHelpers.sendMessageSMS(getApplicationContext(), ViewMessageActivity.this, selectedSMS.address);
+                                                break;
+                                            case 1:
+                                                //Delete SMS (deprecated for Kitkat)
+                                                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR2)
+                                                {
+                                                    try {
+                                                        // Delete the SMS
+                                                        String pid = selectedSMS._id; // Get id;
+                                                        String uri = "content://sms/" + pid;
+                                                        getContentResolver().delete(Uri.parse(uri), null, null);
+                                                        Toast.makeText(ViewMessageActivity.this, "Deleted SMS!", Toast.LENGTH_LONG).show();
+                                                    } catch (Exception e) {
+                                                        Log.e(TAG, e.getStackTrace().toString());
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    Toast.makeText(ViewMessageActivity.this, "KitKat won't let me delete SMSes! Thanks Google!", Toast.LENGTH_LONG).show();
+                                                }
+                                                break;
+                                            default:
+                                                break;
+                                        }
+                                    }
+                                });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
             }
 
         });
@@ -93,7 +137,13 @@ public class ViewMessageActivity extends Activity  {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_message:
-                SMSHelpers.sendDialogSMS(getApplicationContext(), ViewMessageActivity.this, R.id.action_message);
+                SMSHelpers.sendMessageSMS(getApplicationContext(), ViewMessageActivity.this, mAddress);
+                break;
+            case R.id.action_populatemessage:
+                SMSHelpers._addMessage(ViewMessageActivity.this,
+                        "Direct from @ListCraigs66: again To reply, type 'DM @ListCraigs66 [your message]' m.twitter.com/messages");
+                break;
+            default:
                 break;
         }
 

@@ -65,7 +65,7 @@ public class LoginActivity extends Activity {
                         {
                             //String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage(LoginActivity.this);
 
-                            Toast.makeText(getApplicationContext(), "KitKat redirecting...", Toast.LENGTH_LONG).show();
+                            Toast.makeText(LoginActivity.this, "KitKat redirecting...", Toast.LENGTH_LONG).show();
 
                             Intent sendIntent = new Intent(Intent.ACTION_SENDTO, Uri.parse("smsto:" + Uri.encode(SMSHelpers.TWITTER_SHORTCODE)));
                             sendIntent.setType("text/plain");
@@ -123,54 +123,30 @@ public class LoginActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         //TODO: test only!!
         // Populate SMS Inbox with fake data
-        ContentValues values = new ContentValues();
-        values.put("address", SMSHelpers.TWITTER_SHORTCODE);
-        values.put("body", "@CNET: Korean messaging app KakaoTalk tries to rebuild image after privacy flap http://t.co/w3H8o7lYO4/s/hEwf http://t.c");
-        getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
-        values = new ContentValues();
-        values.put("address", SMSHelpers.TWITTER_SHORTCODE);
-        values.put("body", "@Gizmodo: Samsung Galaxy Note 4 Review: The best at being big: http://t.co/t2o0DJniT9/s/Q-q0 http://t.co/TPclSKyBka/s/rA");
-        getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
-        values = new ContentValues();
-        values.put("address", SMSHelpers.TWITTER_SHORTCODE);
-        values.put("body", "1/2: @comex: RT @a_greenberg: Kickstarter for Anonabox launched this morning w/ $7.5k goal. They've raised $85k. https:/");
-        getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
-        values = new ContentValues();
-        values.put("address", SMSHelpers.TWITTER_SHORTCODE);
-        values.put("body", "2/2: /t.co/0IcP3WG4HG/s/4fm2");
-        getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
-        values = new ContentValues();
-        values.put("address", SMSHelpers.TWITTER_SHORTCODE);
-        values.put("body", "@Gizmodo: How to photograph the Northern Lights, from @IndefiniteWild http://t.co/IjUKkYCKoe/s/alIG http://t.co/PcnxciY");
-        getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
-        values = new ContentValues();
-        values.put("address", SMSHelpers.TWITTER_SHORTCODE);
-        values.put("body", "@comex: RT @supersat: @bl4sty @psifertex We need a deterministic CVE number to NSA-like name generator. 5326? That's Sas");
-        getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
-        values = new ContentValues();
-        values.put("address", SMSHelpers.TWITTER_SHORTCODE);
-        values.put("body", "1/2: @CNET: RT @BridgetCarey: Google battles Amazon! Skype battles Snapchat! And Facebook... well, there's egg people. h");
-        getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
-        values = new ContentValues();
-        values.put("address", SMSHelpers.TWITTER_SHORTCODE);
-        values.put("body", "2/2: /J079BnCQxJ/s/mG1X");
-        getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
-        values = new ContentValues();
-        values.put("address", SMSHelpers.TWITTER_SHORTCODE);
-        values.put("body", "Followers: 802,507 Following: 280 Reply w/ WHOIS @CNET to view profile.");
-        getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
-        values = new ContentValues();
-        values.put("address", SMSHelpers.TWITTER_SHORTCODE);
-        values.put("body", "1/2: CNET, since Apr 2009. Bio: CNET is the premier destination for tech product reviews, news, price comparisons, free");
-        getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
-        values = new ContentValues();
-        values.put("address", SMSHelpers.TWITTER_SHORTCODE);
-        values.put("body", "2/2: . Location: San Francisco Web: http://t.co/NajCuIAUyl/s/t6aD");
-        getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
-        values = new ContentValues();
-        values.put("address", SMSHelpers.TWITTER_SHORTCODE);
-        values.put("body", "Direct from @ListCraigs66: again To reply, type 'DM @ListCraigs66 [your message]' m.twitter.com/messages");
-        getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
+        SMSHelpers._addMessage(LoginActivity.this,
+                "@CNET: Korean messaging app KakaoTalk tries to rebuild image after privacy flap http://t.co/w3H8o7lYO4/s/hEwf http://t.c");
+        SMSHelpers._addMessage(LoginActivity.this,
+                "@Gizmodo: Samsung Galaxy Note 4 Review: The best at being big: http://t.co/t2o0DJniT9/s/Q-q0 http://t.co/TPclSKyBka/s/rA");
+        SMSHelpers._addMessage(LoginActivity.this,
+                "1/2: @comex: RT @a_greenberg: Kickstarter for Anonabox launched this morning w/ $7.5k goal. They've raised $85k. https:/");
+        SMSHelpers._addMessage(LoginActivity.this,
+                "2/2: /t.co/0IcP3WG4HG/s/4fm2");
+        SMSHelpers._addMessage(LoginActivity.this,
+                "@Gizmodo: How to photograph the Northern Lights, from @IndefiniteWild http://t.co/IjUKkYCKoe/s/alIG http://t.co/PcnxciY");
+        SMSHelpers._addMessage(LoginActivity.this,
+                "@comex: RT @supersat: @bl4sty @psifertex We need a deterministic CVE number to NSA-like name generator. 5326? That's Sas");
+        SMSHelpers._addMessage(LoginActivity.this,
+                "1/2: @CNET: RT @BridgetCarey: Google battles Amazon! Skype battles Snapchat! And Facebook... well, there's egg people. h");
+        SMSHelpers._addMessage(LoginActivity.this,
+                "2/2: /J079BnCQxJ/s/mG1X");
+        SMSHelpers._addMessage(LoginActivity.this,
+                "Followers: 802,507 Following: 280 Reply w/ WHOIS @CNET to view profile.");
+        SMSHelpers._addMessage(LoginActivity.this,
+                "1/2: CNET, since Apr 2009. Bio: CNET is the premier destination for tech product reviews, news, price comparisons, free");
+        SMSHelpers._addMessage(LoginActivity.this,
+                "2/2: . Location: San Francisco Web: http://t.co/NajCuIAUyl/s/t6aD");
+        SMSHelpers._addMessage(LoginActivity.this,
+                "Direct from @ListCraigs66: again To reply, type 'DM @ListCraigs66 [your message]' m.twitter.com/messages");
 
         Toast.makeText(getApplicationContext(), "Populated fake SMS into inbox!", Toast.LENGTH_LONG).show();
 
