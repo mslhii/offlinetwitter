@@ -21,3 +21,7 @@ Caching once internet connection is reached?
 
 Some good docs are here:
 https://support.twitter.com/articles/14589-getting-started-with-twitter-via-sms
+
+
+Quick note:
+Seems like Kitkat is giving me a lot of problems with its new "default SMS app" rule. Guess I need to place some more Asynctasks to handle silent SMS tasks in the background because of this. A simple implementation got harder thanks to Google :(
