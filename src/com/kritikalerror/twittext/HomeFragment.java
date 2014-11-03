@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,28 +18,93 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import com.kritikalerror.twittext.support.SwipeRefreshLayout;
+
 import java.util.ArrayList;
 
 public class HomeFragment extends Fragment {
 
-    ListView subsView;
-    SMSObjectAdapter adapter;
+    private SwipeRefreshLayout swipeContainer;
+    private ListView subsView;
+    private SMSObjectAdapter adapter;
+    private Handler handler;
+
+    private Context mContext;
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+        handler = new Handler();
 
 		View rootView = inflater.inflate(R.layout.fragment_subscriptions, container, false);
+        subsView = (ListView) rootView.findViewById(R.id.subscriptionList);
+        mContext = rootView.getContext();
+        swipeContainer = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeHomeContainer);
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                handler.post(refreshing);
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorScheme(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+        subsView.setOnScrollListener(new ListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+                boolean enable = false;
+                if(subsView != null && subsView.getChildCount() > 0){
+                    // check if the first item of the list is visible
+                    boolean firstItemVisible = subsView.getFirstVisiblePosition() == 0;
+                    // check if the top of the first item is visible
+                    boolean topOfFirstItemVisible = subsView.getChildAt(0).getTop() == 0;
+                    // enabling or disabling the refresh layout
+                    enable = firstItemVisible && topOfFirstItemVisible;
+                }
+                swipeContainer.setEnabled(enable);
+            }
+        });
 
         displayMessages(rootView);
 
         return rootView;
 	}
 
+    private final Runnable refreshing = new Runnable(){
+        public void run(){
+            try {
+                // TODO : isRefreshing should be attached to your data request status
+                if(swipeContainer.isRefreshing()){
+                    // re run the verification after 1 second
+                    handler.postDelayed(this, 1000);
+                }else{
+                    // stop the animation after the data is fully loaded
+                    swipeContainer.setRefreshing(false);
+                    // TODO : update your list with the new data
+                    Toast.makeText(mContext, "Refreshed!", Toast.LENGTH_LONG).show();
+                }
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
     public void displayMessages(View rootView)
     {
-        final Context viewContext = rootView.getContext();
-        subsView = (ListView) rootView.findViewById(R.id.subscriptionList);
+        final Context viewContext = mContext;
 
         // Set search params
         final Uri inboxURI = Uri.parse("content://sms/inbox");
