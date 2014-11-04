@@ -28,6 +28,7 @@ public class HomeFragment extends Fragment {
     private ListView subsView;
     private SMSObjectAdapter adapter;
     private Handler handler;
+    private View rootView;
 
     private Context mContext;
 
@@ -36,7 +37,7 @@ public class HomeFragment extends Fragment {
 			Bundle savedInstanceState) {
         handler = new Handler();
 
-		View rootView = inflater.inflate(R.layout.fragment_subscriptions, container, false);
+		rootView = inflater.inflate(R.layout.fragment_subscriptions, container, false);
         subsView = (ListView) rootView.findViewById(R.id.subscriptionList);
         mContext = rootView.getContext();
         swipeContainer = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeHomeContainer);
@@ -77,7 +78,7 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        displayMessages(rootView);
+        displayMessages();
 
         return rootView;
 	}
@@ -85,16 +86,9 @@ public class HomeFragment extends Fragment {
     private final Runnable refreshing = new Runnable(){
         public void run(){
             try {
-                // TODO : isRefreshing should be attached to your data request status
-                if(swipeContainer.isRefreshing()){
-                    // re run the verification after 1 second
-                    handler.postDelayed(this, 1000);
-                }else{
-                    // stop the animation after the data is fully loaded
-                    swipeContainer.setRefreshing(false);
-                    // TODO : update your list with the new data
-                    Toast.makeText(mContext, "Refreshed!", Toast.LENGTH_LONG).show();
-                }
+                displayMessages();
+                //Toast.makeText(mContext, "Refreshed!", Toast.LENGTH_SHORT).show();
+                swipeContainer.setRefreshing(false);
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -102,7 +96,7 @@ public class HomeFragment extends Fragment {
         }
     };
 
-    public void displayMessages(View rootView)
+    public void displayMessages()
     {
         final Context viewContext = mContext;
 

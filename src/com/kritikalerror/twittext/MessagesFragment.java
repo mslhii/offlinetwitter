@@ -8,31 +8,100 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.kritikalerror.twittext.support.SwipeRefreshLayout;
 
 import java.util.ArrayList;
 
 public class MessagesFragment extends Fragment {
 
-    ListView messageView;
-    SMSObjectAdapter adapter;
+    private ListView messageView;
+    private SMSObjectAdapter adapter;
+    private SwipeRefreshLayout swipeContainer;
+    private Handler handler;
+
+    private View rootView;
+
+    private Context viewContext;
 
     final String TWITTER_SHORTCODE = "40404";
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+        handler = new Handler();
 
-        View rootView = inflater.inflate(R.layout.fragment_messages, container, false);
-        final Context viewContext = rootView.getContext();
+        rootView = inflater.inflate(R.layout.fragment_messages, container, false);
+        viewContext = rootView.getContext();
         messageView = (ListView) rootView.findViewById(R.id.messageList);
 
+        swipeContainer = (SwipeRefreshLayout) rootView.findViewById(R.id.swipeMessagesContainer);
+
+        swipeContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                // Your code to refresh the list here.
+                // Make sure you call swipeContainer.setRefreshing(false)
+                // once the network request has completed successfully.
+                handler.post(refreshing);
+            }
+        });
+        // Configure the refreshing colors
+        swipeContainer.setColorScheme(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+        messageView.setOnScrollListener(new ListView.OnScrollListener() {
+
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+                boolean enable = false;
+                if(messageView != null && messageView.getChildCount() > 0){
+                    // check if the first item of the list is visible
+                    boolean firstItemVisible = messageView.getFirstVisiblePosition() == 0;
+                    // check if the top of the first item is visible
+                    boolean topOfFirstItemVisible = messageView.getChildAt(0).getTop() == 0;
+                    // enabling or disabling the refresh layout
+                    enable = firstItemVisible && topOfFirstItemVisible;
+                }
+                swipeContainer.setEnabled(enable);
+            }
+        });
+
+        displayMessages();
+
+        return rootView;
+    }
+
+    private final Runnable refreshing = new Runnable(){
+        public void run(){
+            try {
+                displayMessages();
+                //Toast.makeText(mContext, "Refreshed!", Toast.LENGTH_SHORT).show();
+                swipeContainer.setRefreshing(false);
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    };
+
+    private void displayMessages()
+    {
         // Set search params
         Uri inboxURI = Uri.parse("content://sms/inbox");
         String[] reqCols = new String[]{"_id", "address", "date", "body"};
@@ -79,8 +148,6 @@ public class MessagesFragment extends Fragment {
             }
 
         });
-
-        return rootView;
     }
 
 }
