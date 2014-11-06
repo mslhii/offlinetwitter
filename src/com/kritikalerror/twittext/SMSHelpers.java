@@ -22,6 +22,7 @@ public class SMSHelpers {
     public static final int REPLY = 100;
     public static final int RETWEET = 200;
     public static final int FAVORITE = 300;
+    public static final int REGISTER_USERNAME = 400;
     public static final int START = 10;
     public static final int STOP = 20;
     public static final int ON = 30;
@@ -96,6 +97,11 @@ public class SMSHelpers {
                 prepareTweet.setHint("What's happening?");
                 sendButton.setText("Reply");
                 actionString = "@ ";
+                break;
+            case REGISTER_USERNAME:
+                smsDialog.setTitle("Enter Username");
+                prepareTweet.setHint("Username");
+                sendButton.setText("Send");
                 break;
             default:
                 return false; //No appropriate action to take

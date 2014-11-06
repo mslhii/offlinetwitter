@@ -84,12 +84,20 @@ public class LoginActivity extends Activity {
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
                                                 dialog.cancel();
+
+                                                SMSHelpers.sendHiddenSMS(getApplicationContext(),
+                                                        "YES",
+                                                        "");
                                             }
                                         });
                                 builder1.setNegativeButton("No",
                                         new DialogInterface.OnClickListener() {
                                             public void onClick(DialogInterface dialog, int id) {
                                                 dialog.cancel();
+
+                                                SMSHelpers.sendDialogSMS(getApplicationContext(),
+                                                        LoginActivity.this,
+                                                        SMSHelpers.REGISTER_USERNAME);
                                             }
                                         });
 
