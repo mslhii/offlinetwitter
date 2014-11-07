@@ -17,7 +17,6 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import android.app.Activity;
-import android.content.ContentValues;
 import android.content.Intent;
 
 public class LoginActivity extends Activity {
