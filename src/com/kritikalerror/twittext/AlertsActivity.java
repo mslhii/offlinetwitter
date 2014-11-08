@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,11 +25,10 @@ import java.util.ArrayList;
 public class AlertsActivity extends Activity {
 
     private ListView threadView;
-    private SMSObjectAdapter adapter;
+    private SimpleCursorAdapter adapter;
 
     private final String TWITTER_SHORTCODE = "40404";
     private final String TAG = "AlertsActivity";
-    private String mAddress = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +40,6 @@ public class AlertsActivity extends Activity {
 
         threadView = (ListView) findViewById(R.id.messagesList);
 
-        mAddress = getIntent().getExtras().getString("address");
-
         // Set search params
         Uri inboxURI = Uri.parse("content://sms/inbox");
         String[] reqCols = new String[]{"_id", "address", "date", "body"};
@@ -51,9 +49,7 @@ public class AlertsActivity extends Activity {
         ContentResolver smsRetrieve = getContentResolver();
 
         // Retrieve relevant Twitter SMSes through query
-        Cursor cursor = smsRetrieve.query(inboxURI, reqCols, "address LIKE ?", filter, null);
-
-        ArrayList<SMSObject> smsArray = new ArrayList<SMSObject>();
+        Cursor cursor = smsRetrieve.query(inboxURI, reqCols, null, null, null);
 
         // Change cursor so that we get subscriptions from the results
         if (cursor.moveToFirst()) {
@@ -61,18 +57,16 @@ public class AlertsActivity extends Activity {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
 
-                if (cursor.getString(3).matches("(.*)Sorry, no suggestions for who to follow right now. Check back later!(.*)") ||
-                        cursor.getString(3).matches("(.*)D " + cursor.getString(1) + " (.*)")) {
-                    smsArray.add(new SMSObject(cursor.getString(0), //id
-                            cursor.getString(1), //address
-                            cursor.getString(2), //date
-                            cursor.getString(3).trim())); //original text
-                }
+                Log.e("TEST", "id: " + cursor.getString(0));
+                Log.e("TEST", "address: " + cursor.getString(1));
+                Log.e("TEST", "date: " + cursor.getString(2));
+                Log.e("TEST", "text: " + cursor.getString(3));
             }
         }
 
         // Attached Cursor with adapter and display in listview
-        adapter = new SMSObjectAdapter(AlertsActivity.this, smsArray);
+        adapter = new SimpleCursorAdapter(AlertsActivity.this, R.layout.row_layout, cursor,
+                new String[] { "body", "address", "date" }, new int[] { R.id.text, R.id.name, R.id.date });
         threadView.setAdapter(adapter);
 
     }
@@ -89,7 +83,6 @@ public class AlertsActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_message:
-                SMSHelpers.sendMessageSMS(getApplicationContext(), AlertsActivity.this, mAddress);
                 break;
             case R.id.action_populatemessage:
                 SMSHelpers._addMessage(AlertsActivity.this,

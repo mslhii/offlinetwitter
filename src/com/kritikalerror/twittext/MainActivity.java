@@ -105,7 +105,8 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
                 SMSHelpers.sendDialogSMS(getApplicationContext(), MainActivity.this, R.id.action_compose);
                 return super.onOptionsItemSelected(item);
             case R.id.action_alert: //Send Tweet
-                Toast.makeText(getApplicationContext(), "Not implemented yet, coming soon!", Toast.LENGTH_LONG).show();
+                Intent alertsIntent = new Intent(MainActivity.this, AlertsActivity.class);
+                startActivity(alertsIntent);
                 return super.onOptionsItemSelected(item);
             case R.id.action_message: //Send Direct Message
                 SMSHelpers.sendDialogSMS(getApplicationContext(), MainActivity.this, R.id.action_message);

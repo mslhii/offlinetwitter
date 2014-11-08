@@ -17,10 +17,12 @@ import android.widget.ListView;
 
 import com.kritikalerror.twittext.support.SwipeRefreshLayout;
 
+import java.util.ArrayList;
+
 public class ActivityFragment extends Fragment {
 
     private ListView subsView;
-    private SimpleCursorAdapter adapter;
+    private SMSObjectAdapter adapter;
 
     private SwipeRefreshLayout swipeContainer;
     private Handler handler;
@@ -100,14 +102,16 @@ public class ActivityFragment extends Fragment {
     {
         // Set search params
         Uri inboxURI = Uri.parse("content://sms/inbox");
-        String[] reqCols = new String[] { "_id", "address", "date", "body" };
-        String[] filter = new String[] { "%" + TWITTER_SHORTCODE + "%" };
+        String[] reqCols = new String[]{"_id", "address", "date", "body"};
+        String[] filter = new String[]{"%" + TWITTER_SHORTCODE + "%"};
 
         // Get Content Resolver object, which will deal with Content Provider
         ContentResolver smsRetrieve = viewContext.getContentResolver();
 
         // Retrieve relevant Twitter SMSes through query
-        Cursor cursor = smsRetrieve.query(inboxURI, reqCols, null, null, null);
+        Cursor cursor = smsRetrieve.query(inboxURI, reqCols, "address LIKE ?", filter, null);
+
+        ArrayList<SMSObject> smsArray = new ArrayList<SMSObject>();
 
         // Change cursor so that we get subscriptions from the results
         if (cursor.moveToFirst()) {
@@ -115,31 +119,17 @@ public class ActivityFragment extends Fragment {
             for (int i = 0; i < cursor.getCount(); i++) {
                 cursor.moveToPosition(i);
 
-                Log.e("TEST", "id: " + cursor.getString(0));
-                Log.e("TEST", "address: " + cursor.getString(1));
-                Log.e("TEST", "date: " + cursor.getString(2));
-                Log.e("TEST", "text: " + cursor.getString(3));
+                if (cursor.getString(3).contains("Sorry, no suggestions for who to follow right now. Check back later!")) {
+                    smsArray.add(new SMSObject(cursor.getString(0), //id
+                            cursor.getString(2), //date
+                            cursor.getString(3).trim())); //original text
+                }
             }
         }
 
         // Attached Cursor with adapter and display in listview
-        adapter = new SimpleCursorAdapter(viewContext, R.layout.row_layout, cursor,
-                new String[] { "body", "address", "date" }, new int[] { R.id.text, R.id.name, R.id.date });
+        adapter = new SMSObjectAdapter(viewContext, smsArray);
         subsView.setAdapter(adapter);
     }
 
 }
-
-/*
-// Create Inbox box URI
-        Uri inboxURI = Uri.parse("content://sms/inbox");
-
-        // List required columns
-        String[] reqCols = new String[] { "_id", "address", "body" };
-
-        // Get Content Resolver object, which will deal with Content Provider
-        ContentResolver cr = viewContext.getContentResolver();
-
-        // Fetch Inbox SMS Message from Built-in Content Provider
-        Cursor c = cr.query(inboxURI, reqCols, null, null, null);
- */

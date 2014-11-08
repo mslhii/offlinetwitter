@@ -46,6 +46,16 @@ public class SMSObject {
         this.original = original;
     }
 
+    // Constructor for discovery
+    public SMSObject(String id, String date, String original)
+    {
+        this._id = id;
+        this.shortcode = SMSHelpers.TWITTER_SHORTCODE;
+        this.date = convertDate(date);
+        this.text = original;
+        this.original = original;
+    }
+
     // Constructor for tweets
     public SMSObject(String id, String address, String date, String text, String original)
     {
