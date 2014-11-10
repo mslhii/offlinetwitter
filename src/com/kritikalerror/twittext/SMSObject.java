@@ -50,6 +50,7 @@ public class SMSObject {
     public SMSObject(String id, String date, String original)
     {
         this._id = id;
+        this.address = "Twitter";
         this.shortcode = SMSHelpers.TWITTER_SHORTCODE;
         this.date = convertDate(date);
         this.text = original;

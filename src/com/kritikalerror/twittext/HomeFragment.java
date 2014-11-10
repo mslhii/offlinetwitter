@@ -7,9 +7,11 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -173,7 +175,7 @@ public class HomeFragment extends Fragment {
                 {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("Tweet Options")
-                            .setItems(new CharSequence[]{"View Profile", "Reply", "Retweet", "Favorite", "Report"},
+                            .setItems(new CharSequence[]{"View Profile", "Reply", "Retweet", "Favorite", "Report", "Delete"},
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
                                             // The 'which' argument contains the index position
@@ -196,7 +198,7 @@ public class HomeFragment extends Fragment {
                                                 case 4:
                                                     SMSHelpers.sendHiddenSMS(viewContext, "UNFOLLOW " + selectedSMS.address);
                                                     break;
-                                                case 5:
+                                                case 8:
                                                     SMSHelpers.sendHiddenSMS(viewContext, "LEAVE " + selectedSMS.address);
                                                     break;
                                                 case 6:
@@ -204,6 +206,25 @@ public class HomeFragment extends Fragment {
                                                     break;
                                                 case 7:
                                                     SMSHelpers.sendHiddenSMS(viewContext, "REPORT " + selectedSMS.address);
+                                                    break;
+                                                case 5:
+                                                    //Delete SMS (deprecated for Kitkat)
+                                                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR2)
+                                                    {
+                                                        try {
+                                                            // Delete the SMS
+                                                            String pid = selectedSMS._id; // Get id;
+                                                            String uri = "content://sms/" + pid;
+                                                            viewContext.getContentResolver().delete(Uri.parse(uri), null, null);
+                                                            Toast.makeText(viewContext, "Deleted SMS!", Toast.LENGTH_LONG).show();
+                                                        } catch (Exception e) {
+                                                            Log.e("HOME", e.getStackTrace().toString());
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        Toast.makeText(viewContext, "KitKat won't let me delete SMSes! Thanks Google!", Toast.LENGTH_LONG).show();
+                                                    }
                                                     break;
                                                 default:
                                                     break;
@@ -216,7 +237,7 @@ public class HomeFragment extends Fragment {
                 else {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("Tweet Options")
-                            .setItems(new CharSequence[]{"View Profile", "Reply", "Report"},
+                            .setItems(new CharSequence[]{"View Profile", "Reply", "Report", "Delete"},
                                     new DialogInterface.OnClickListener() {
                                         public void onClick(DialogInterface dialog, int which) {
                                             // The 'which' argument contains the index position
@@ -233,7 +254,7 @@ public class HomeFragment extends Fragment {
                                                 case 2:
                                                     SMSHelpers.sendHiddenSMS(viewContext, "UNFOLLOW " + selectedSMS.address);
                                                     break;
-                                                case 3:
+                                                case 6:
                                                     SMSHelpers.sendHiddenSMS(viewContext, "LEAVE " + selectedSMS.address);
                                                     break;
                                                 case 4:
@@ -241,6 +262,25 @@ public class HomeFragment extends Fragment {
                                                     break;
                                                 case 5:
                                                     SMSHelpers.sendHiddenSMS(viewContext, "REPORT " + selectedSMS.address);
+                                                    break;
+                                                case 3:
+                                                    //Delete SMS (deprecated for Kitkat)
+                                                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR2)
+                                                    {
+                                                        try {
+                                                            // Delete the SMS
+                                                            String pid = selectedSMS._id; // Get id;
+                                                            String uri = "content://sms/" + pid;
+                                                            viewContext.getContentResolver().delete(Uri.parse(uri), null, null);
+                                                            Toast.makeText(viewContext, "Deleted SMS!", Toast.LENGTH_LONG).show();
+                                                        } catch (Exception e) {
+                                                            Log.e("HOME", e.getStackTrace().toString());
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        Toast.makeText(viewContext, "KitKat won't let me delete SMSes! Thanks Google!", Toast.LENGTH_LONG).show();
+                                                    }
                                                     break;
                                                 default:
                                                     break;

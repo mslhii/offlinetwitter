@@ -122,6 +122,10 @@ public class OtherProfileActivity extends Activity {
                         {
                             result[1] = temp.trim();
                             hasStats = true;
+
+                            Toast.makeText(OtherProfileActivity.this,
+                                    "Got stats info!",
+                                    Toast.LENGTH_SHORT).show();
                         }
 
                         int secondTextIDX = temp.indexOf("2/2: ");
@@ -131,6 +135,10 @@ public class OtherProfileActivity extends Activity {
                             cursor.move(1);
                             i++;
                             temp = cursor.getString(3).trim();
+
+                            Toast.makeText(OtherProfileActivity.this,
+                                    "Needs to be joined!",
+                                    Toast.LENGTH_SHORT).show();
                         }
 
                         if(temp.contains(shortAddr + ", since"))
@@ -146,6 +154,10 @@ public class OtherProfileActivity extends Activity {
                                 result[0] = temp.trim();
                             }
                             hasWHOIS = true;
+
+                            Toast.makeText(OtherProfileActivity.this,
+                                    "Got WHOIS SMS!",
+                                    Toast.LENGTH_SHORT).show();
                         }
                     }
                 }

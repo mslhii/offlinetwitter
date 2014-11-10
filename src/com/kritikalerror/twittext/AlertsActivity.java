@@ -73,25 +73,14 @@ public class AlertsActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.messages, menu);
-        return super.onCreateOptionsMenu(menu);
+        menu.add(0, 0, 0, "Populate");
+        return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_message:
-                break;
-            case R.id.action_populatemessage:
-                SMSHelpers._addMessage(AlertsActivity.this,
-                        "Sorry, no suggestions for who to follow right now. Check back later!");
-                break;
-            default:
-                break;
-        }
-
+        SMSHelpers._addMessage(AlertsActivity.this,
+                "Sorry, no suggestions for who to follow right now. Check back later!");
         return super.onOptionsItemSelected(item);
     }
 

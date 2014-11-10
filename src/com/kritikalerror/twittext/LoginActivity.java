@@ -102,6 +102,10 @@ public class LoginActivity extends Activity {
 
                                 AlertDialog alert11 = builder1.create();
                                 alert11.show();
+
+                                Toast.makeText(LoginActivity.this,
+                                        "Got response!",
+                                        Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
