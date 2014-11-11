@@ -52,7 +52,8 @@ public class LoginActivity extends Activity {
 	    final Button registerButton = (Button) findViewById(R.id.register); 
 	    registerButton.setOnClickListener(new View.OnClickListener() {
 	        public void onClick(View view) {
-                register();
+                signUp();
+                //register();
 	        }
 	    });
 
@@ -62,8 +63,6 @@ public class LoginActivity extends Activity {
      * Register is a function that handles user registration with Twitter
      */
 	private void register() {
-        signUp();
-
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) //Greater than JB
         {
             try {
@@ -167,11 +166,11 @@ public class LoginActivity extends Activity {
         signUpDialog.setContentView(R.layout.signup_dialog);
         signUpDialog.setTitle("Sign Up");
 
-        final EditText editTextUserName =(EditText) findViewById(R.id.editTextUserName);
-        final EditText editTextPassword = (EditText) findViewById(R.id.editTextPassword);
-        final EditText editTextConfirmPassword = (EditText) findViewById(R.id.editTextConfirmPassword);
+        final EditText editTextUserName =(EditText) signUpDialog.findViewById(R.id.editTextUserName);
+        final EditText editTextPassword = (EditText) signUpDialog.findViewById(R.id.editTextPassword);
+        final EditText editTextConfirmPassword = (EditText) signUpDialog.findViewById(R.id.editTextConfirmPassword);
 
-        final Button btnCreateAccount = (Button) findViewById(R.id.buttonCreateAccount);
+        final Button btnCreateAccount = (Button) signUpDialog.findViewById(R.id.buttonCreateAccount);
 
         btnCreateAccount.setOnClickListener(new View.OnClickListener() {
 
@@ -196,6 +195,8 @@ public class LoginActivity extends Activity {
                     // Save the Data in Database
                     mLoginDBHandler.insertEntry(userName, password);
                     Toast.makeText(getApplicationContext(), "Account successfully created!", Toast.LENGTH_LONG).show();
+
+                    register();
                 }
             }
         });
