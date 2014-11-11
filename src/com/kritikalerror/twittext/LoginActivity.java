@@ -2,6 +2,7 @@ package com.kritikalerror.twittext;
 
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
 import android.database.Cursor;
@@ -14,12 +15,17 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import android.app.Activity;
 import android.content.Intent;
 
+import com.kritikalerror.twittext.db.LoginDBHandler;
+
 public class LoginActivity extends Activity {
+
+    LoginDBHandler mLoginDBHandler;
 
     private final int BACK_RESULT = 2;
 	
@@ -32,14 +38,15 @@ public class LoginActivity extends Activity {
         ActionBar ab = getActionBar();
         ab.hide();
 
+        // Get instance of Login DB
+        mLoginDBHandler = new LoginDBHandler(this);
+        mLoginDBHandler.open();
+
 		final Button launchMain = (Button) findViewById(R.id.login); 
 	    launchMain.setOnClickListener(new View.OnClickListener() {
-	        public void onClick(View view) {                 
-	        	Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
-	        	//myIntent.putExtra("key", value); //implement login stuff later
-	        	startActivity(myIntent);
-                finish();
-	        }
+	        public void onClick(View view) {
+                logIn();
+            }
 	    });
 	    
 	    final Button registerButton = (Button) findViewById(R.id.register); 
@@ -55,6 +62,8 @@ public class LoginActivity extends Activity {
      * Register is a function that handles user registration with Twitter
      */
 	private void register() {
+        signUp();
+
         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) //Greater than JB
         {
             try {
@@ -151,6 +160,89 @@ public class LoginActivity extends Activity {
         }
 	}
 
+    private void signUp()
+    {
+        final Dialog signUpDialog = new Dialog(LoginActivity.this);
+
+        signUpDialog.setContentView(R.layout.signup_dialog);
+        signUpDialog.setTitle("Sign Up");
+
+        final EditText editTextUserName =(EditText) findViewById(R.id.editTextUserName);
+        final EditText editTextPassword = (EditText) findViewById(R.id.editTextPassword);
+        final EditText editTextConfirmPassword = (EditText) findViewById(R.id.editTextConfirmPassword);
+
+        final Button btnCreateAccount = (Button) findViewById(R.id.buttonCreateAccount);
+
+        btnCreateAccount.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                String userName=editTextUserName.getText().toString();
+                String password=editTextPassword.getText().toString();
+                String confirmPassword=editTextConfirmPassword.getText().toString();
+
+                if(userName.equals("")||password.equals("")||confirmPassword.equals(""))
+                {
+                    Toast.makeText(getApplicationContext(), "Field empty!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+
+                if(!password.equals(confirmPassword))
+                {
+                    Toast.makeText(getApplicationContext(), "Passwords do not match!", Toast.LENGTH_LONG).show();
+                    return;
+                }
+                else
+                {
+                    // Save the Data in Database
+                    mLoginDBHandler.insertEntry(userName, password);
+                    Toast.makeText(getApplicationContext(), "Account successfully created!", Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
+        signUpDialog.show();
+    }
+
+    private void logIn()
+    {
+        final Dialog loginDialog = new Dialog(LoginActivity.this);
+
+        loginDialog.setContentView(R.layout.login_dialog);
+        loginDialog.setTitle("Login");
+
+        final EditText editTextUserName = (EditText) loginDialog.findViewById(R.id.editTextUserNameToLogin);
+        final EditText editTextPassword = (EditText) loginDialog.findViewById(R.id.editTextPasswordToLogin);
+
+        final Button btnSignIn = (Button) loginDialog.findViewById(R.id.buttonSignIn);
+
+        btnSignIn.setOnClickListener(new View.OnClickListener() {
+
+            public void onClick(View v) {
+                String userName = editTextUserName.getText().toString();
+                String password = editTextPassword.getText().toString();
+
+                String storedPassword = mLoginDBHandler.getSingleEntry(userName);
+
+                if(password.equals(storedPassword))
+                {
+                    Toast.makeText(LoginActivity.this, "Login Successful!", Toast.LENGTH_LONG).show();
+                    loginDialog.dismiss();
+
+                    Intent myIntent = new Intent(LoginActivity.this, MainActivity.class);
+                    startActivity(myIntent);
+                    finish();
+                }
+                else
+                {
+                    Toast.makeText(LoginActivity.this, "Username and Password do not match!", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        });
+
+        loginDialog.show();
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data)
     {
@@ -163,6 +255,12 @@ public class LoginActivity extends Activity {
             startActivity(myIntent);
             finish();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mLoginDBHandler.close();
     }
 
     @Override

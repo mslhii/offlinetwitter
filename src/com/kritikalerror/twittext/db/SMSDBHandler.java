@@ -1,4 +1,4 @@
-package com.kritikalerror.twittext;
+package com.kritikalerror.twittext.db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
