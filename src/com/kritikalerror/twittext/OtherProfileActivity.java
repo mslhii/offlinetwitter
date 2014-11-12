@@ -118,7 +118,8 @@ public class OtherProfileActivity extends Activity {
 
                         temp = cursor.getString(3).trim();
 
-                        if(temp.contains("Followers: ") && temp.contains(shortAddr))
+                        if(temp.matches("(.*)Followers:(.*)Following:(.*)Reply w/ WHOIS(.*)to view profile.(.*)")
+                                && temp.contains(shortAddr))
                         {
                             result[1] = temp.trim();
                             hasStats = true;
