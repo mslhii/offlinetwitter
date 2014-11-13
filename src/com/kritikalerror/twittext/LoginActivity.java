@@ -276,6 +276,10 @@ public class LoginActivity extends Activity {
         //TODO: test only!!
         // Populate SMS Inbox with fake data
         SMSHelpers._addMessage(LoginActivity.this,
+                "Followers: 1,133,542 Following: 79 Reply w/ WHOIS @GIZMODO to view profile.");
+        SMSHelpers._addMessage(LoginActivity.this,
+                "Gizmodo, since Mar 2007. Bio: Technologies that change the way we live, work, love, play, think, and feel. Web: http://t");
+        SMSHelpers._addMessage(LoginActivity.this,
                 "@CNET: Korean messaging app KakaoTalk tries to rebuild image after privacy flap http://t.co/w3H8o7lYO4/s/hEwf http://t.c");
         SMSHelpers._addMessage(LoginActivity.this,
                 "@Gizmodo: Samsung Galaxy Note 4 Review: The best at being big: http://t.co/t2o0DJniT9/s/Q-q0 http://t.co/TPclSKyBka/s/rA");
