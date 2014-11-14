@@ -89,7 +89,6 @@ public class HomeFragment extends Fragment {
         public void run(){
             try {
                 displayMessages();
-                //Toast.makeText(mContext, "Refreshed!", Toast.LENGTH_SHORT).show();
                 swipeContainer.setRefreshing(false);
             }
             catch (Exception e) {
@@ -104,6 +103,7 @@ public class HomeFragment extends Fragment {
 
         // Set search params
         final Uri inboxURI = Uri.parse("content://sms/inbox");
+        final Uri sentURI = Uri.parse("content://sms/sent");
         final String[] reqCols = new String[] { "_id", "address", "date", "body" };
         String[] filter = new String[] { "%" + SMSHelpers.TWITTER_SHORTCODE + "%" };
 
