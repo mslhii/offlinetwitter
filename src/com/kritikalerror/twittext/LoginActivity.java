@@ -10,7 +10,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.telephony.SmsManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -275,33 +274,33 @@ public class LoginActivity extends Activity {
     public boolean onOptionsItemSelected(MenuItem item) {
         //TODO: test only!!
         // Populate SMS Inbox with fake data
-        SMSHelpers._addMessage(LoginActivity.this,
+        SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "Followers: 1,133,542 Following: 79 Reply w/ WHOIS @GIZMODO to view profile.");
-        SMSHelpers._addMessage(LoginActivity.this,
+        SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "Gizmodo, since Mar 2007. Bio: Technologies that change the way we live, work, love, play, think, and feel. Web: http://t");
-        SMSHelpers._addMessage(LoginActivity.this,
+        SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "@CNET: Korean messaging app KakaoTalk tries to rebuild image after privacy flap http://t.co/w3H8o7lYO4/s/hEwf http://t.c");
-        SMSHelpers._addMessage(LoginActivity.this,
+        SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "@Gizmodo: Samsung Galaxy Note 4 Review: The best at being big: http://t.co/t2o0DJniT9/s/Q-q0 http://t.co/TPclSKyBka/s/rA");
-        SMSHelpers._addMessage(LoginActivity.this,
+        SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "1/2: @comex: RT @a_greenberg: Kickstarter for Anonabox launched this morning w/ $7.5k goal. They've raised $85k. https:/");
-        SMSHelpers._addMessage(LoginActivity.this,
+        SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "2/2: /t.co/0IcP3WG4HG/s/4fm2");
-        SMSHelpers._addMessage(LoginActivity.this,
+        SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "@Gizmodo: How to photograph the Northern Lights, from @IndefiniteWild http://t.co/IjUKkYCKoe/s/alIG http://t.co/PcnxciY");
-        SMSHelpers._addMessage(LoginActivity.this,
+        SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "@comex: RT @supersat: @bl4sty @psifertex We need a deterministic CVE number to NSA-like name generator. 5326? That's Sas");
-        SMSHelpers._addMessage(LoginActivity.this,
+        SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "1/2: @CNET: RT @BridgetCarey: Google battles Amazon! Skype battles Snapchat! And Facebook... well, there's egg people. h");
-        SMSHelpers._addMessage(LoginActivity.this,
+        SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "2/2: /J079BnCQxJ/s/mG1X");
-        SMSHelpers._addMessage(LoginActivity.this,
+        SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "Followers: 802,507 Following: 280 Reply w/ WHOIS @CNET to view profile.");
-        SMSHelpers._addMessage(LoginActivity.this,
+        SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "1/2: CNET, since Apr 2009. Bio: CNET is the premier destination for tech product reviews, news, price comparisons, free");
-        SMSHelpers._addMessage(LoginActivity.this,
+        SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "2/2: . Location: San Francisco Web: http://t.co/NajCuIAUyl/s/t6aD");
-        SMSHelpers._addMessage(LoginActivity.this,
+        SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "Direct from @ListCraigs66: again To reply, type 'DM @ListCraigs66 [your message]' m.twitter.com/messages");
 
         Toast.makeText(getApplicationContext(), "Populated fake SMS into inbox!", Toast.LENGTH_LONG).show();

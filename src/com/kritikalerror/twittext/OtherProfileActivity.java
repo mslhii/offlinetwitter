@@ -123,7 +123,6 @@ public class OtherProfileActivity extends Activity {
                         {
                             result[1] = temp.trim();
                             hasStats = true;
-                            Log.e("PROFILE", "Has stats!");
                         }
 
                         int secondTextIDX = temp.indexOf("2/2: ");
@@ -148,7 +147,6 @@ public class OtherProfileActivity extends Activity {
                                 result[0] = temp.trim();
                             }
                             hasWHOIS = true;
-                            Log.e("PROFILE", "Has WHOIS!");
                         }
                     }
                 }

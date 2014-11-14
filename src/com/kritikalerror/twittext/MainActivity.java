@@ -104,7 +104,7 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
             case R.id.action_compose: //Send Tweet
                 SMSHelpers.sendDialogSMS(getApplicationContext(), MainActivity.this, R.id.action_compose);
                 return super.onOptionsItemSelected(item);
-            case R.id.action_alert: //Send Tweet
+            case R.id.action_alert: //Check Alerts
                 Intent alertsIntent = new Intent(MainActivity.this, AlertsActivity.class);
                 startActivity(alertsIntent);
                 return super.onOptionsItemSelected(item);

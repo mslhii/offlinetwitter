@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
@@ -140,7 +139,7 @@ public class ViewMessageActivity extends Activity  {
                 SMSHelpers.sendMessageSMS(getApplicationContext(), ViewMessageActivity.this, mAddress);
                 break;
             case R.id.action_populatemessage:
-                SMSHelpers._addMessage(ViewMessageActivity.this,
+                SMSHelpers._addMessageToInbox(ViewMessageActivity.this,
                         "Direct from @ListCraigs66: again To reply, type 'DM @ListCraigs66 [your message]' m.twitter.com/messages");
                 break;
             default:

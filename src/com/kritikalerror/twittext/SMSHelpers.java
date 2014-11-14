@@ -119,6 +119,9 @@ public class SMSHelpers {
                 try {
                     SmsManager smsManager = SmsManager.getDefault();
                     smsManager.sendTextMessage(TWITTER_SHORTCODE, null, tweetParams, null, null);
+
+                    //TODO: may not be necessary
+                    SMSHelpers._addMessageToSent(context, tweetParams);
                     Toast.makeText(context, "Sent the request!",
                             Toast.LENGTH_LONG).show();
                 } catch (Exception e) {
@@ -177,11 +180,19 @@ public class SMSHelpers {
         return true;
     }
 
-    public static void _addMessage(Context context, String message)
+    public static void _addMessageToInbox(Context context, String message)
     {
         ContentValues values = new ContentValues();
         values.put("address", SMSHelpers.TWITTER_SHORTCODE);
         values.put("body", message);
         context.getContentResolver().insert(Uri.parse("content://sms/inbox"), values);
+    }
+
+    public static void _addMessageToSent(Context context, String message)
+    {
+        ContentValues values = new ContentValues();
+        values.put("address", SMSHelpers.TWITTER_SHORTCODE);
+        values.put("body", message);
+        context.getContentResolver().insert(Uri.parse("content://sms/sent"), values);
     }
 }

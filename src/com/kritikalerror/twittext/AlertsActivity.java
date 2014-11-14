@@ -1,26 +1,15 @@
 package com.kritikalerror.twittext;
 
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.ContentResolver;
-import android.content.DialogInterface;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
-
-import com.kritikalerror.twittext.R;
-
-import java.util.ArrayList;
 
 public class AlertsActivity extends Activity {
 
@@ -79,7 +68,7 @@ public class AlertsActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        SMSHelpers._addMessage(AlertsActivity.this,
+        SMSHelpers._addMessageToInbox(AlertsActivity.this,
                 "Sorry, no suggestions for who to follow right now. Check back later!");
         return super.onOptionsItemSelected(item);
     }
