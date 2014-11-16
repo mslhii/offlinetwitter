@@ -2,8 +2,10 @@ package com.kritikalerror.twittext;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.telephony.SmsManager;
 import android.view.View;

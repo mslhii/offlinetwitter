@@ -193,6 +193,9 @@ public class OtherProfileActivity extends Activity {
             // Request user profile data
             SMSHelpers.sendHiddenSMS(context, "WHOIS " + address);
             SMSHelpers.sendHiddenSMS(context, "STATS " + address);
+
+            //TODO: unit tests!
+            _profileLoadUnitTest(address.substring(1));
         }
 
         @Override
@@ -224,5 +227,31 @@ public class OtherProfileActivity extends Activity {
             }
             mDownloadProgress.cancel();
         }
+    }
+
+    private void _profileLoadUnitTest(final String address)
+    {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    Thread.sleep(5000);
+                    SMSHelpers._addMessageToInbox(OtherProfileActivity.this, address +
+                            ", since Dec 1912. Bio: Test. Web: http://test.com. Location: TEST");
+                    SMSHelpers._addMessageToInbox(OtherProfileActivity.this,
+                            "Followers: 1 Following: 10 Reply w/ WHOIS @" + address + " to view profile.");
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                runOnUiThread(new Runnable()
+                {
+                    public void run()
+                    {
+                        Toast.makeText(OtherProfileActivity.this, "Placed text in inbox!", Toast.LENGTH_SHORT);
+                    }
+                });
+            }
+        }).start();
     }
 }
