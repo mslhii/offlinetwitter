@@ -191,11 +191,13 @@ public class OtherProfileActivity extends Activity {
             mDownloadProgress.show();
 
             // Request user profile data
-            SMSHelpers.sendHiddenSMS(context, "WHOIS " + address);
-            SMSHelpers.sendHiddenSMS(context, "STATS " + address);
+            if(!hasBothSMS(context, address)) {
+                SMSHelpers.sendHiddenSMS(context, "WHOIS " + address);
+                SMSHelpers.sendHiddenSMS(context, "STATS " + address);
 
-            //TODO: unit tests!
-            _profileLoadUnitTest(address.substring(1));
+                //TODO: unit tests!
+                _profileLoadUnitTest(address.substring(1));
+            }
         }
 
         @Override
@@ -227,6 +229,79 @@ public class OtherProfileActivity extends Activity {
             }
             mDownloadProgress.cancel();
         }
+    }
+
+    private boolean hasBothSMS(Context context, String address)
+    {
+        String[] result = new String[2]; //1st is whois, 2nd is stats info
+
+        // Set search params
+        final Uri inboxURI = Uri.parse("content://sms/inbox");
+        final String[] reqCols = new String[] { "_id", "address", "date", "body" };
+        String[] filter = new String[] { "%" + SMSHelpers.TWITTER_SHORTCODE + "%" };
+
+        // Get Content Resolver object, which will deal with Content Provider
+        ContentResolver smsRetrieve = context.getContentResolver();
+
+        // Retrieve relevant Twitter SMSes through query
+        Cursor cursor = smsRetrieve.query(inboxURI, reqCols, "address LIKE ?", filter, null);
+
+        // We need to keep looping and refreshing until we get the SMSes
+        boolean hasWHOIS = false;
+        boolean hasStats = false;
+        // Check to see if SMSes we have are from the correct Tweeter
+        String temp = "";
+        String shortAddr = address.replace("@", "");
+        String tempText = "";
+        String theText = "";
+        boolean needsJoin = false;
+        if (cursor.moveToFirst()) {
+            for (int i = 0; i < cursor.getCount(); i++) {
+                cursor.moveToPosition(i);
+
+                temp = cursor.getString(3).trim();
+
+                if(temp.matches("(.*)Followers:(.*)Following:(.*)Reply w/ WHOIS(.*)to view profile.(.*)")
+                        && (temp.contains(shortAddr) ||
+                        temp.contains(shortAddr.toLowerCase()) ||
+                        temp.contains(shortAddr.toUpperCase())))
+                {
+                    result[1] = temp.trim();
+                    hasStats = true;
+                }
+
+                int secondTextIDX = temp.indexOf("2/2: ");
+                if(secondTextIDX != -1) {
+                    tempText = temp.substring(secondTextIDX + 5, temp.length());
+                    needsJoin = true;
+                    cursor.move(1);
+                    i++;
+                    temp = cursor.getString(3).trim();
+                }
+
+                if(temp.contains(shortAddr + ", since"))
+                {
+                    if(needsJoin)
+                    {
+                        theText = cursor.getString(3).trim();
+                        theText = theText + tempText;
+                        needsJoin = false;
+                        result[0] = theText.trim();
+                    }
+                    else {
+                        result[0] = temp.trim();
+                    }
+                    hasWHOIS = true;
+                }
+            }
+        }
+
+        if(hasWHOIS && hasStats)
+        {
+            return true;
+        }
+
+        return false;
     }
 
     private void _profileLoadUnitTest(final String address)
