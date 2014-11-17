@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsMessage;
+import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Created by Michael on 10/16/2014.
@@ -18,6 +20,7 @@ public class SMSInterceptReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         String smsAddress = "";
+        String smsBody = "";
 
         if (intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
 
@@ -27,6 +30,12 @@ public class SMSInterceptReceiver extends BroadcastReceiver {
             // Get message
             SmsMessage messages = SmsMessage.createFromPdu((byte[]) pdus[0]);
             smsAddress = messages.getOriginatingAddress();
+            smsBody = messages.getDisplayMessageBody();
+
+            String debugMsg = "senderNum: " + smsAddress + "; message: " + smsBody;
+            Log.e("Receiver", debugMsg);
+
+            Toast.makeText(context, debugMsg, Toast.LENGTH_SHORT).show();
 
             // Abort broadcast if it's from Twitter
             if (smsAddress.equals(TWITTER_SHORTCODE)) {
