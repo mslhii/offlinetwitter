@@ -2,6 +2,7 @@ package com.kritikalerror.twittext;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -30,10 +31,7 @@ public class SMSHelpers {
     public static final int ON = 30;
     public static final int OFF = 40;
 
-
-    private SMSHelpers() {
-        // Nothing here, is supposed to be a static class
-    }
+    public static final String TAG = "TwitText";
 
     public static boolean sendHiddenSMS(final Context context, String actionString) {
         try {

@@ -67,6 +67,23 @@ public class LoginActivity extends Activity {
                 SmsManager smsManager = SmsManager.getDefault();
                 smsManager.sendTextMessage(SMSHelpers.TWITTER_SHORTCODE, null, "START", null, null);
 
+                //String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage();
+                /*
+                // Can be null in case that there is no default
+                // then the user would be able to choose any app that supports this intent.
+                if (defaultSmsPackageName != null)
+                {
+                    intent.setPackage(defaultSmsPackageName);
+                }
+                 */
+
+                Intent intent = new Intent(Intent.ACTION_SENDTO,
+                        Uri.parse("smsto:" + Uri.encode(SMSHelpers.TWITTER_SHORTCODE)));
+                intent.putExtra("sms_body", "");
+                startActivity(intent);
+
+                //TODO: save listener for later
+                /*
                 final Uri inboxURI = Uri.parse("content://sms/inbox");
                 final String[] reqCols = new String[] { "_id", "address", "date", "body" };
                 String[] filter = new String[] { "%" + SMSHelpers.TWITTER_SHORTCODE + "%" };
@@ -116,6 +133,7 @@ public class LoginActivity extends Activity {
                         }
                     }
                 }
+                */
             } catch (Exception e) {
                 Toast.makeText(getApplicationContext(),
                         "Request failed, please try again later!",

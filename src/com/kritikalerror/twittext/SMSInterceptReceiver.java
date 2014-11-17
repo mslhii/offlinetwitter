@@ -33,7 +33,7 @@ public class SMSInterceptReceiver extends BroadcastReceiver {
             smsBody = messages.getDisplayMessageBody();
 
             String debugMsg = "senderNum: " + smsAddress + "; message: " + smsBody;
-            Log.e("Receiver", debugMsg);
+            Log.e(SMSHelpers.TAG, debugMsg);
 
             Toast.makeText(context, debugMsg, Toast.LENGTH_SHORT).show();
 

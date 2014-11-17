@@ -123,6 +123,9 @@ public class OtherProfileActivity extends Activity {
                         {
                             result[1] = temp.trim();
                             hasStats = true;
+
+                            _toastAsyncDebugger("STATS");
+                            Log.e(SMSHelpers.TAG, "Has STATS!");
                         }
 
                         int secondTextIDX = temp.indexOf("2/2: ");
@@ -147,6 +150,9 @@ public class OtherProfileActivity extends Activity {
                                 result[0] = temp.trim();
                             }
                             hasWHOIS = true;
+
+                            _toastAsyncDebugger("WHOIS");
+                            Log.e(SMSHelpers.TAG, "Has WHOIS!");
                         }
                     }
                 }
@@ -228,6 +234,22 @@ public class OtherProfileActivity extends Activity {
                 }
             }
             mDownloadProgress.cancel();
+        }
+
+        private void _toastAsyncDebugger(final String status)
+        {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable()
+                    {
+                        public void run()
+                        {
+                            Toast.makeText(OtherProfileActivity.this, "Has: " + status + "!!!!!", Toast.LENGTH_SHORT);
+                        }
+                    });
+                }
+            }).start();
         }
     }
 
