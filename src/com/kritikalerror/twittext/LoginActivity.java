@@ -61,118 +61,47 @@ public class LoginActivity extends Activity {
      * Register is a function that handles user registration with Twitter
      */
 	private void register() {
-        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) //Greater than JB
-        {
-            try {
-                SmsManager smsManager = SmsManager.getDefault();
-                smsManager.sendTextMessage(SMSHelpers.TWITTER_SHORTCODE, null, "START", null, null);
-
-                //String defaultSmsPackageName = Telephony.Sms.getDefaultSmsPackage();
-                /*
-                // Can be null in case that there is no default
-                // then the user would be able to choose any app that supports this intent.
-                if (defaultSmsPackageName != null)
-                {
-                    intent.setPackage(defaultSmsPackageName);
-                }
-                 */
-
-                Intent intent = new Intent(Intent.ACTION_SENDTO,
-                        Uri.parse("smsto:" + Uri.encode(SMSHelpers.TWITTER_SHORTCODE)));
-                intent.putExtra("sms_body", "");
-                startActivity(intent);
-
-                //TODO: save listener for later
-                /*
-                final Uri inboxURI = Uri.parse("content://sms/inbox");
-                final String[] reqCols = new String[] { "_id", "address", "date", "body" };
-                String[] filter = new String[] { "%" + SMSHelpers.TWITTER_SHORTCODE + "%" };
-                boolean hasResponse = false;
-                while(!hasResponse)
-                {
-                    ContentResolver smsRetrieve = getContentResolver();
-                    Cursor cursor = smsRetrieve.query(inboxURI, reqCols, "address LIKE ?", filter, null);
-
-                    if (cursor.moveToFirst()) {
-                        for (int i = 0; i < cursor.getCount(); i++) {
-                            cursor.moveToPosition(i);
-
-                            if(cursor.getString(3).contains("Welcome to Twitter!"))
-                            {
-                                AlertDialog.Builder builder1 = new AlertDialog.Builder(LoginActivity.this);
-                                builder1.setMessage("Do you have a Twitter account already?");
-                                builder1.setCancelable(true);
-                                builder1.setPositiveButton("Yes",
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                dialog.cancel();
-
-                                                SMSHelpers.sendHiddenSMS(getApplicationContext(),
-                                                        "YES",
-                                                        "");
-                                            }
-                                        });
-                                builder1.setNegativeButton("No",
-                                        new DialogInterface.OnClickListener() {
-                                            public void onClick(DialogInterface dialog, int id) {
-                                                dialog.cancel();
-
-                                                SMSHelpers.sendDialogSMS(getApplicationContext(),
-                                                        LoginActivity.this,
-                                                        SMSHelpers.REGISTER_USERNAME);
-                                            }
-                                        });
-
-                                AlertDialog alert11 = builder1.create();
-                                alert11.show();
-
-                                Toast.makeText(LoginActivity.this,
-                                        "Got response!",
-                                        Toast.LENGTH_SHORT).show();
-                            }
-                        }
+        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+        builder.setTitle("Please register using Messaging app");
+        builder.setMessage("Register using the Messaging app. Follow the instructions that Twitter sends you. When you are finished, press the back button.");
+        builder.setCancelable(true);
+        builder.setNegativeButton("OK",
+            new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int id) {
+                    try {
+                        SmsManager smsManager = SmsManager.getDefault();
+                        smsManager.sendTextMessage(SMSHelpers.TWITTER_SHORTCODE, null, "START", null, null);
+                    } catch (Exception e) {
+                        Toast.makeText(getApplicationContext(),
+                                "Request failed, please try again later!",
+                                Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
                     }
+
+                    Intent smsIntent;
+                    if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) //Greater than JB
+                    {
+                        smsIntent = new Intent(Intent.ACTION_SENDTO,
+                                Uri.parse("smsto:" + Uri.encode(SMSHelpers.TWITTER_SHORTCODE)));
+                        smsIntent.putExtra("sms_body", "");
+                        startActivity(smsIntent);
+                    }
+                    else
+                    {
+                        smsIntent = new Intent(Intent.ACTION_VIEW);
+                        smsIntent.setType("vnd.android-dir/mms-sms");
+                        smsIntent.putExtra("address", SMSHelpers.TWITTER_SHORTCODE);
+                        smsIntent.putExtra("sms_body", "");
+                        startActivityForResult(smsIntent, BACK_RESULT);
+                    }
+
+                    dialog.cancel();
                 }
-                */
-            } catch (Exception e) {
-                Toast.makeText(getApplicationContext(),
-                        "Request failed, please try again later!",
-                        Toast.LENGTH_LONG).show();
-                e.printStackTrace();
-            }
-        }
-        else //earlier versions
-        {
-            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-            builder.setTitle("Please register using Messaging app");
-            builder.setMessage("Register using the Messaging app. Follow the instructions that Twitter sends you. When you are finished, press the back button.");
-            builder.setCancelable(true);
-            builder.setNegativeButton("OK",
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            try {
-                                SmsManager smsManager = SmsManager.getDefault();
-                                smsManager.sendTextMessage(SMSHelpers.TWITTER_SHORTCODE, null, "START", null, null);
-                            } catch (Exception e) {
-                                Toast.makeText(getApplicationContext(),
-                                        "Request failed, please try again later!",
-                                        Toast.LENGTH_LONG).show();
-                                e.printStackTrace();
-                            }
+            });
 
-                            Intent smsIntent = new Intent(Intent.ACTION_VIEW);
-                            smsIntent.setType("vnd.android-dir/mms-sms");
-                            smsIntent.putExtra("address", SMSHelpers.TWITTER_SHORTCODE);
-                            smsIntent.putExtra("sms_body", "");
-                            startActivityForResult(smsIntent, BACK_RESULT);
 
-                            dialog.cancel();
-                        }
-                    });
-
-            AlertDialog alert = builder.create();
-            alert.show();
-        }
+        AlertDialog alert = builder.create();
+        alert.show();
 	}
 
     private void signUp()
@@ -335,3 +264,56 @@ Your phone is already set up to use Twitter. Reply w/ FOLLOW username to get the
 You're now following @Gizmodo. Their tweets will be sent to you. Send OFF @Gizmodo to stop.
 Notifications are now on. Reply w/OFF to turn them off. Reply w/SET for additional notification settings help.
  */
+
+//TODO: save listener for later
+/*
+final Uri inboxURI = Uri.parse("content://sms/inbox");
+final String[] reqCols = new String[] { "_id", "address", "date", "body" };
+String[] filter = new String[] { "%" + SMSHelpers.TWITTER_SHORTCODE + "%" };
+boolean hasResponse = false;
+while(!hasResponse)
+{
+    ContentResolver smsRetrieve = getContentResolver();
+    Cursor cursor = smsRetrieve.query(inboxURI, reqCols, "address LIKE ?", filter, null);
+
+    if (cursor.moveToFirst()) {
+        for (int i = 0; i < cursor.getCount(); i++) {
+            cursor.moveToPosition(i);
+
+            if(cursor.getString(3).contains("Welcome to Twitter!"))
+            {
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(LoginActivity.this);
+                builder1.setMessage("Do you have a Twitter account already?");
+                builder1.setCancelable(true);
+                builder1.setPositiveButton("Yes",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+                                SMSHelpers.sendHiddenSMS(getApplicationContext(),
+                                        "YES",
+                                        "");
+                            }
+                        });
+                builder1.setNegativeButton("No",
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
+
+                                SMSHelpers.sendDialogSMS(getApplicationContext(),
+                                        LoginActivity.this,
+                                        SMSHelpers.REGISTER_USERNAME);
+                            }
+                        });
+
+                AlertDialog alert11 = builder1.create();
+                alert11.show();
+
+                Toast.makeText(LoginActivity.this,
+                        "Got response!",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+}
+*/
