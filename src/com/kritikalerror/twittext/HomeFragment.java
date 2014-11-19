@@ -163,12 +163,11 @@ public class HomeFragment extends Fragment {
                 sentCursor.moveToPosition(i);
 
                 // Do not want any other messages we send to Twitter
-                if(SMSHelpers.isSMSTweet(cursor.getString(3).trim())) {
-                    smsArray.add(new SMSObject(cursor.getString(0), //id
-                            cursor.getString(1), //address
-                            cursor.getString(2), //date
-                            theText, //text
-                            cursor.getString(3).trim())); //original text
+                if(SMSHelpers.isSMSTweet(sentCursor.getString(3).trim())) {
+                    smsArray.add(new SMSObject(sentCursor.getString(0), //id
+                            Integer.valueOf(sentCursor.getString(1)), //address
+                            sentCursor.getString(2), //date
+                            sentCursor.getString(3).trim())); //text
                 }
             }
         }

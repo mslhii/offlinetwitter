@@ -225,7 +225,9 @@ public class SMSHelpers {
                 !(message.toLowerCase().matches("report (.*)")) &&
                 !(message.toLowerCase().matches("rep (.*)")) &&
                 !(message.toLowerCase().matches("unblock (.*)")) &&
-                !(message.toLowerCase().matches("unblk (.*)")))
+                !(message.toLowerCase().matches("unblk (.*)")) &&
+                !(message.toLowerCase().matches("(.*), since (.*). Bio:(.*)")) &&
+                !(message.toLowerCase().matches("(.*)Followers:(.*)Following:(.*)Reply w/ WHOIS(.*)to view profile.(.*)")))
         {
             return true;
         }

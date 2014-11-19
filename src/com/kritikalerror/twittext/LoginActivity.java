@@ -228,6 +228,7 @@ public class LoginActivity extends Activity {
                 "@CNET: Korean messaging app KakaoTalk tries to rebuild image after privacy flap http://t.co/w3H8o7lYO4/s/hEwf http://t.c");
         SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "@Gizmodo: Samsung Galaxy Note 4 Review: The best at being big: http://t.co/t2o0DJniT9/s/Q-q0 http://t.co/TPclSKyBka/s/rA");
+        SMSHelpers._addMessageToSent(LoginActivity.this, "RT CNET");
         SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "1/2: @comex: RT @a_greenberg: Kickstarter for Anonabox launched this morning w/ $7.5k goal. They've raised $85k. https:/");
         SMSHelpers._addMessageToInbox(LoginActivity.this,
@@ -236,6 +237,7 @@ public class LoginActivity extends Activity {
                 "@Gizmodo: How to photograph the Northern Lights, from @IndefiniteWild http://t.co/IjUKkYCKoe/s/alIG http://t.co/PcnxciY");
         SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "@comex: RT @supersat: @bl4sty @psifertex We need a deterministic CVE number to NSA-like name generator. 5326? That's Sas");
+        SMSHelpers._addMessageToSent(LoginActivity.this, "D comex so when is the next ios jb released??");
         SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "1/2: @CNET: RT @BridgetCarey: Google battles Amazon! Skype battles Snapchat! And Facebook... well, there's egg people. h");
         SMSHelpers._addMessageToInbox(LoginActivity.this,
@@ -248,6 +250,7 @@ public class LoginActivity extends Activity {
                 "2/2: . Location: San Francisco Web: http://t.co/NajCuIAUyl/s/t6aD");
         SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "Direct from @ListCraigs66: again To reply, type 'DM @ListCraigs66 [your message]' m.twitter.com/messages");
+        SMSHelpers._addMessageToSent(LoginActivity.this, "Test Tweet!");
 
         Toast.makeText(getApplicationContext(), "Populated fake SMS into inbox!", Toast.LENGTH_LONG).show();
 

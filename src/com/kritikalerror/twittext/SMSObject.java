@@ -75,7 +75,7 @@ public class SMSObject {
 
         // Get the name of the user who wrote that tweet
         int index = tempText.indexOf(": ");
-        Log.e("TEST", String.valueOf(index));
+        Log.e(SMSHelpers.TAG, (String.valueOf(index) + " " + tempText));
 
         this._id = id;
         this.timestamp = date;
@@ -84,6 +84,19 @@ public class SMSObject {
         this.date = convertDate(date);
         this.text = tempText.substring(index + 2, tempText.length());
         this.original = original;
+    }
+
+    // Constructor for own tweets
+    public SMSObject(String id, int address, String date, String text)
+    {
+
+        this._id = id;
+        this.timestamp = date;
+        this.shortcode = Integer.toString(address);
+        this.address = "User"; //TODO: add username
+        this.date = convertDate(date);
+        this.text = text;
+        this.original = text;
     }
 
     private String convertDate(String inDate) {
