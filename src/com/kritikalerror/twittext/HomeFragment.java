@@ -23,6 +23,8 @@ import android.widget.Toast;
 import com.kritikalerror.twittext.support.SwipeRefreshLayout;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class HomeFragment extends Fragment {
 
@@ -33,6 +35,7 @@ public class HomeFragment extends Fragment {
     private View rootView;
 
     private Context mContext;
+    private Comparator<SMSObject> timeComparator = new TimestampComparator();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -112,6 +115,7 @@ public class HomeFragment extends Fragment {
 
         // Retrieve relevant Twitter SMSes through query
         Cursor cursor = smsRetrieve.query(inboxURI, reqCols, "address LIKE ?", filter, null);
+        Cursor sentCursor = smsRetrieve.query(sentURI, reqCols, "address LIKE ?", filter, null);
         ArrayList<SMSObject> smsArray = new ArrayList<SMSObject>();
 
         // Change cursor so that we get subscriptions from the results
@@ -153,6 +157,24 @@ public class HomeFragment extends Fragment {
                 }
             }
         }
+
+        if (sentCursor.moveToFirst()) {
+            for (int i = 0; i < sentCursor.getCount(); i++) {
+                sentCursor.moveToPosition(i);
+
+                // Do not want any other messages we send to Twitter
+                if(SMSHelpers.isSMSTweet(cursor.getString(3).trim())) {
+                    smsArray.add(new SMSObject(cursor.getString(0), //id
+                            cursor.getString(1), //address
+                            cursor.getString(2), //date
+                            theText, //text
+                            cursor.getString(3).trim())); //original text
+                }
+            }
+        }
+
+        // Sort ArrayList by timestamp
+        Collections.sort(smsArray, timeComparator);
 
         // Attached Cursor with adapter and display in listview
         adapter = new SMSObjectAdapter(viewContext, smsArray);
@@ -292,5 +314,12 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+    }
+
+    public class TimestampComparator implements Comparator<SMSObject> {
+        @Override
+        public int compare(SMSObject arg0, SMSObject arg1) {
+            return (int) (Long.parseLong(arg1.timestamp) - Long.parseLong(arg0.timestamp));
+        }
     }
 }

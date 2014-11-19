@@ -17,6 +17,7 @@ public class SMSObject {
     public String date;
     public String text;
     public String original;
+    public String timestamp;
 
     // Lazy instantiation constructor
     public SMSObject()
@@ -27,6 +28,7 @@ public class SMSObject {
         date = "0";
         text = "";
         original = "";
+        timestamp = "0";
     }
 
     // Constructor for messages
@@ -39,6 +41,7 @@ public class SMSObject {
         Log.e("TEST", String.valueOf(index));
 
         this._id = id;
+        this.timestamp = date;
         this.shortcode = address;
         this.address = original.substring(addressIndex + 12, index);
         this.date = convertDate(date);
@@ -50,6 +53,7 @@ public class SMSObject {
     public SMSObject(String id, String date, String original)
     {
         this._id = id;
+        this.timestamp = date;
         this.address = "Twitter";
         this.shortcode = SMSHelpers.TWITTER_SHORTCODE;
         this.date = convertDate(date);
@@ -74,6 +78,7 @@ public class SMSObject {
         Log.e("TEST", String.valueOf(index));
 
         this._id = id;
+        this.timestamp = date;
         this.shortcode = address;
         this.address = tempText.substring(0, index);
         this.date = convertDate(date);

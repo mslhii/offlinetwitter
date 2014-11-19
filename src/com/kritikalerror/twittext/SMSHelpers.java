@@ -180,6 +180,59 @@ public class SMSHelpers {
         return true;
     }
 
+    public static boolean isSMSTweet(String message)
+    {
+        if(!(message.matches("D (.*)")) &&
+                !(message.toLowerCase().matches("suggest")) &&
+                !(message.toLowerCase().matches("on (.*)")) &&
+                !(message.toLowerCase().matches("off (.*)")) &&
+                !(message.toLowerCase().matches("follow (.*)")) &&
+                !(message.toLowerCase().matches("unfollow (.*)")) &&
+                !(message.toLowerCase().matches("f (.*)")) &&
+                !(message.toLowerCase().matches("leave (.*)")) &&
+                !(message.toLowerCase().matches("stop")) &&
+                !(message.toLowerCase().matches("quit")) &&
+                !(message.toLowerCase().matches("unsubscribe")) &&
+                !(message.toLowerCase().matches("cancel")) &&
+                !(message.toLowerCase().matches("end")) &&
+                !(message.toLowerCase().matches("arret")) &&
+                !(message.toLowerCase().matches("l (.*)")) &&
+                !(message.toLowerCase().matches("set location (.*)")) &&
+                !(message.toLowerCase().matches("set bio (.*)")) &&
+                !(message.toLowerCase().matches("set profile (.*)")) &&
+                !(message.toLowerCase().matches("set language (.*)")) &&
+                !(message.toLowerCase().matches("set name (.*)")) &&
+                !(message.toLowerCase().matches("set url (.*)")) &&
+                !(message.toLowerCase().matches("whois (.*)")) &&
+                !(message.toLowerCase().matches("w (.*)")) &&
+                !(message.toLowerCase().matches("get (.*)")) &&
+                !(message.toLowerCase().matches("g (.*)")) &&
+                !(message.toLowerCase().matches("fav (.*)")) &&
+                !(message.toLowerCase().matches("fave (.*)")) &&
+                !(message.toLowerCase().matches("favorite (.*)")) &&
+                !(message.toLowerCase().matches("favourite (.*)")) &&
+                !(message.toLowerCase().matches("stats (.*)")) &&
+                !(message.toLowerCase().matches("sug")) &&
+                !(message.toLowerCase().matches("s")) &&
+                !(message.toLowerCase().matches("wtf")) &&
+                !(message.toLowerCase().matches("help")) &&
+                !(message.toLowerCase().matches("info")) &&
+                !(message.toLowerCase().matches("aide")) &&
+                !(message.toLowerCase().matches("set discover on")) &&
+                !(message.toLowerCase().matches("set discover off")) &&
+                !(message.toLowerCase().matches("block (.*)")) &&
+                !(message.toLowerCase().matches("blk (.*)")) &&
+                !(message.toLowerCase().matches("report (.*)")) &&
+                !(message.toLowerCase().matches("rep (.*)")) &&
+                !(message.toLowerCase().matches("unblock (.*)")) &&
+                !(message.toLowerCase().matches("unblk (.*)")))
+        {
+            return true;
+        }
+
+        return false;
+    }
+
     public static void _addMessageToInbox(Context context, String message)
     {
         ContentValues values = new ContentValues();
