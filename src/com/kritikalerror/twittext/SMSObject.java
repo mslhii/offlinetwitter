@@ -93,7 +93,7 @@ public class SMSObject {
         this._id = id;
         this.timestamp = date;
         this.shortcode = Integer.toString(address);
-        this.address = "User"; //TODO: add username
+        this.address = SMSHelpers.userName;
         this.date = convertDate(date);
         this.text = text;
         this.original = text;

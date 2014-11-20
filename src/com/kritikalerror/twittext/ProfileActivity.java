@@ -114,6 +114,10 @@ public class ProfileActivity extends Activity {
             SMSHelpers.sendHiddenSMS(getApplicationContext(), "SET BIO ", mBio.getText().toString());
         }
 
+        // Store username in static variable for future access
+        // without having to go into SharedPreferences
+        SMSHelpers.userName = userNameResults;
+
         SharedPreferences.Editor edit = mSharedPreferences.edit();
         edit.putString(REAL_NAME_KEY, realNameResults);
         edit.putString(USER_NAME_KEY, userNameResults);

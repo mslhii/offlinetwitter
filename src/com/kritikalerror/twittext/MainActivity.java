@@ -8,6 +8,7 @@ import android.app.ActionBar;
 import android.app.ActionBar.Tab;
 import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -30,11 +31,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 	private String[] mTabTitles = { "Home", "Messages", "Discover" };
 
     private SharedPreferences mSettingsPrefs;
+    private SharedPreferences mSharedPreferences;
     private boolean mDiscoverySetting = true;
     private boolean mNotificationSetting = true;
     private String mLanguageSetting = "English";
 
     private int SETTINGS_RESULT = 1;
+    private final String USER_NAME_KEY = "userNameKey";
 
 	@SuppressLint("NewApi")
 	@Override
@@ -53,6 +56,13 @@ public class MainActivity extends FragmentActivity implements ActionBar.TabListe
 		mActionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         mSettingsPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mSharedPreferences = getSharedPreferences("TwitTextProfileSettings", Context.MODE_PRIVATE);
+
+        // Set username to whatever we have saved
+        if (mSharedPreferences.contains(USER_NAME_KEY))
+        {
+            SMSHelpers.userName = mSharedPreferences.getString(USER_NAME_KEY, "");
+        }
 
 		// Adding Tabs
 		for (String tab_name : mTabTitles) 

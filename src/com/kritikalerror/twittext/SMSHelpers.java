@@ -32,6 +32,7 @@ public class SMSHelpers {
     public static final int OFF = 40;
 
     public static final String TAG = "TwitText";
+    public static String userName = "User";
 
     public static boolean sendHiddenSMS(final Context context, String actionString) {
         try {
@@ -183,6 +184,8 @@ public class SMSHelpers {
     public static boolean isSMSTweet(String message)
     {
         if(!(message.matches("D (.*)")) &&
+                !(message.toLowerCase().matches("retweet (.*)")) &&
+                !(message.toLowerCase().matches("rt (.*)")) &&
                 !(message.toLowerCase().matches("suggest")) &&
                 !(message.toLowerCase().matches("on (.*)")) &&
                 !(message.toLowerCase().matches("off (.*)")) &&

@@ -322,3 +322,8 @@ public class HomeFragment extends Fragment {
         }
     }
 }
+
+/*
+ 40404: 1/2: You have retweeted @CNET's latest tweet: Ebola outbreaks, privacy concerns & acts of violence drove http://t.co/EQX 11:03 PM
+40404: 2/2: f the... 11:03 PM
+ */
