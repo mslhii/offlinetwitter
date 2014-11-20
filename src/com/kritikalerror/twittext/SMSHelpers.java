@@ -184,6 +184,7 @@ public class SMSHelpers {
     public static boolean isSMSTweet(String message)
     {
         if(!(message.matches("D (.*)")) &&
+                !(message.toLowerCase().matches("start")) &&
                 !(message.toLowerCase().matches("retweet (.*)")) &&
                 !(message.toLowerCase().matches("rt (.*)")) &&
                 !(message.toLowerCase().matches("suggest")) &&
