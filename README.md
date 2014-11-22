@@ -9,10 +9,14 @@ Such an app can be good for developing countries lacking robust internet or mobi
 
 The current version as is tests SMS functionality and integration into the UI.
 
-V1 Features to be added:
+V1 Features added:
 SMS sorting by notifications/actual texts
-Messages implementation needs to be finished
 UI implementation to mimic Twitter
+
+V1 Features to be added:
+Messages implementation needs to be finished
+SMS Reception listeners for updates
+More polished UI
 
 V2 Features to be added:
 Internal SQLite DB to store SMS to be used (also as a backup copy of SMS data)
