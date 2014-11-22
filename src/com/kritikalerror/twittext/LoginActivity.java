@@ -251,6 +251,7 @@ public class LoginActivity extends Activity {
         SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "Direct from @ListCraigs66: again To reply, type 'DM @ListCraigs66 [your message]' m.twitter.com/messages");
         SMSHelpers._addMessageToSent(LoginActivity.this, "Test Tweet!");
+        SMSHelpers._addMessageToSent(LoginActivity.this, "D ListCraigs66 test reply!");
 
         Toast.makeText(getApplicationContext(), "Populated fake SMS into inbox!", Toast.LENGTH_LONG).show();
 
@@ -267,56 +268,3 @@ Your phone is already set up to use Twitter. Reply w/ FOLLOW username to get the
 You're now following @Gizmodo. Their tweets will be sent to you. Send OFF @Gizmodo to stop.
 Notifications are now on. Reply w/OFF to turn them off. Reply w/SET for additional notification settings help.
  */
-
-//TODO: save listener for later
-/*
-final Uri inboxURI = Uri.parse("content://sms/inbox");
-final String[] reqCols = new String[] { "_id", "address", "date", "body" };
-String[] filter = new String[] { "%" + SMSHelpers.TWITTER_SHORTCODE + "%" };
-boolean hasResponse = false;
-while(!hasResponse)
-{
-    ContentResolver smsRetrieve = getContentResolver();
-    Cursor cursor = smsRetrieve.query(inboxURI, reqCols, "address LIKE ?", filter, null);
-
-    if (cursor.moveToFirst()) {
-        for (int i = 0; i < cursor.getCount(); i++) {
-            cursor.moveToPosition(i);
-
-            if(cursor.getString(3).contains("Welcome to Twitter!"))
-            {
-                AlertDialog.Builder builder1 = new AlertDialog.Builder(LoginActivity.this);
-                builder1.setMessage("Do you have a Twitter account already?");
-                builder1.setCancelable(true);
-                builder1.setPositiveButton("Yes",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-
-                                SMSHelpers.sendHiddenSMS(getApplicationContext(),
-                                        "YES",
-                                        "");
-                            }
-                        });
-                builder1.setNegativeButton("No",
-                        new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int id) {
-                                dialog.cancel();
-
-                                SMSHelpers.sendDialogSMS(getApplicationContext(),
-                                        LoginActivity.this,
-                                        SMSHelpers.REGISTER_USERNAME);
-                            }
-                        });
-
-                AlertDialog alert11 = builder1.create();
-                alert11.show();
-
-                Toast.makeText(LoginActivity.this,
-                        "Got response!",
-                        Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
-}
-*/

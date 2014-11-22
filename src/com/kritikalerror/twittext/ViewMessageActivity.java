@@ -60,24 +60,24 @@ public class ViewMessageActivity extends Activity  {
         if (cursor.moveToFirst()) {
             //String str = cursor.getString(cursor.getColumnIndex("text"));
             for (int i = 0; i < cursor.getCount(); i++) {
-                cursor.moveToPosition(i);
+            cursor.moveToPosition(i);
 
-                if (cursor.getString(3).matches("(.*)Direct from @(.*): (.*)") ||
-                        cursor.getString(3).matches("(.*)D " + cursor.getString(1) + " (.*)")) {
-                    smsArray.add(new SMSObject(cursor.getString(0), //id
-                            cursor.getString(1), //address
-                            cursor.getString(2), //date
-                            cursor.getString(3).trim())); //original text
-                }
+            if (cursor.getString(3).matches("(.*)Direct from @(.*): (.*)") ||
+                    cursor.getString(3).matches("(.*)D " + cursor.getString(1) + " (.*)")) {
+                smsArray.add(new SMSObject(cursor.getString(0), //id
+                        cursor.getString(1), //address
+                        cursor.getString(2), //date
+                        cursor.getString(3).trim())); //original text
             }
         }
+    }
 
-        // Attached Cursor with adapter and display in listview
-        adapter = new SMSObjectAdapter(ViewMessageActivity.this, smsArray);
-        threadView.setAdapter(adapter);
+    // Attached Cursor with adapter and display in listview
+    adapter = new SMSObjectAdapter(ViewMessageActivity.this, smsArray);
+    threadView.setAdapter(adapter);
 
-        // Make ListView items clickable
-        threadView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+    // Make ListView items clickable
+    threadView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long rowId) {
                 final SMSObject selectedSMS = (SMSObject) parent.getItemAtPosition(position);
