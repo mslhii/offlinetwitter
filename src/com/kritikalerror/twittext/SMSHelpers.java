@@ -33,6 +33,8 @@ public class SMSHelpers {
 
     public static final String TAG = "TwitText";
     public static String userName = "User";
+    public static boolean hasStatReceiver = false;
+    public static boolean hasWHOISReceiver = false;
 
     public static boolean sendHiddenSMS(final Context context, String actionString) {
         try {

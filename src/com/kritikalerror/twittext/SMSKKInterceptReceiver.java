@@ -15,7 +15,8 @@ import android.widget.Toast;
  */
 public class SMSKKInterceptReceiver extends BroadcastReceiver {
 
-    final String TWITTER_SHORTCODE = "40404";
+    public static String statsKKMessage = "";
+    public static String whoisKKMessage = "";
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -33,7 +34,18 @@ public class SMSKKInterceptReceiver extends BroadcastReceiver {
             smsAddress = messages.getOriginatingAddress();
             smsBody = messages.getDisplayMessageBody();
 
-            String debugMsg = "senderNum: " + smsAddress + "; message: " + smsBody;
+            if(smsBody.trim().matches("(.*)Followers:(.*)Following:(.*)Reply w/ WHOIS(.*)to view profile.(.*)"))
+            {
+                SMSHelpers.hasStatReceiver = true;
+                statsKKMessage = smsBody.trim();
+            }
+            else if(smsBody.trim().matches("(.*), since (.*)"))
+            {
+                SMSHelpers.hasWHOISReceiver = true;
+                whoisKKMessage = smsBody.trim();
+            }
+
+            String debugMsg = "Kitkat senderNum: " + smsAddress + "; message: " + smsBody;
             Log.e("KITKATReceiver", debugMsg);
 
             Toast.makeText(context, debugMsg, Toast.LENGTH_SHORT).show();

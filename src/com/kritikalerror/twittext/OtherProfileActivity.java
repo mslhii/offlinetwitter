@@ -89,6 +89,36 @@ public class OtherProfileActivity extends Activity {
         protected String[] doInBackground(Void... params) {
             String[] result = new String[2]; //1st is whois, 2nd is stats info
 
+            // Wait for receiver to respond
+            String temp = "";
+            String shortAddr = address.replace("@", "");
+            while(!(SMSHelpers.hasStatReceiver && SMSHelpers.hasWHOISReceiver))
+            {
+                if(SMSHelpers.hasStatReceiver)
+                {
+                    temp = SMSKKInterceptReceiver.statsKKMessage;
+                    if(temp.contains(shortAddr) ||
+                            temp.contains(shortAddr.toLowerCase()) ||
+                            temp.contains(shortAddr.toUpperCase()))
+                    {
+                        result[1] = temp;
+                    }
+                }
+                else if(SMSHelpers.hasWHOISReceiver)
+                {
+                    //TODO: worry about joins later
+                    result[0] = temp;
+                }
+
+                if(mBreak)
+                {
+                    break;
+                }
+            }
+            SMSHelpers.hasStatReceiver = false;
+            SMSHelpers.hasWHOISReceiver = false;
+
+            /*
             // Set search params
             final Uri inboxURI = Uri.parse("content://sms/inbox");
             final String[] reqCols = new String[] { "_id", "address", "date", "body" };
@@ -165,6 +195,7 @@ public class OtherProfileActivity extends Activity {
             // Reset the two flags to make sure we can get future texts?
             hasWHOIS = false;
             hasStats = false;
+            */
 
             //temp comment to aid in parsing
             //40404: Gizmodo, since Mar 2007. Bio: Technologies that change the way we live, work, love, play, think, and feel. Web: http://t

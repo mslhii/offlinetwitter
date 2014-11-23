@@ -32,8 +32,17 @@ public class SMSInterceptReceiver extends BroadcastReceiver {
             smsAddress = messages.getOriginatingAddress();
             smsBody = messages.getDisplayMessageBody();
 
-            String debugMsg = "senderNum: " + smsAddress + "; message: " + smsBody;
+            String debugMsg = "Regular senderNum: " + smsAddress + "; message: " + smsBody;
             Log.e(SMSHelpers.TAG, debugMsg);
+
+            if(smsBody.trim().matches("(.*)Followers:(.*)Following:(.*)Reply w/ WHOIS(.*)to view profile.(.*)"))
+            {
+                SMSHelpers.hasStatReceiver = true;
+            }
+            else if(smsBody.trim().matches("(.*), since (.*)"))
+            {
+                SMSHelpers.hasWHOISReceiver = true;
+            }
 
             Toast.makeText(context, debugMsg, Toast.LENGTH_SHORT).show();
 
