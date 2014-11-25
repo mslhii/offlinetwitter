@@ -23,7 +23,6 @@ public class SMSKKInterceptReceiver extends BroadcastReceiver {
         String smsAddress = "";
         String smsBody = "";
 
-        //if (intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED_ACTION")) {
         if (intent.getAction().equals("android.provider.Telephony.SMS_RECEIVED")) {
 
             Bundle pdusBundle = intent.getExtras();

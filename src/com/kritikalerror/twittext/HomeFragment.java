@@ -191,8 +191,10 @@ public class HomeFragment extends Fragment {
                 Cursor tempCursor = smsTemp.query(inboxURI, reqCols, "address LIKE ? AND body LIKE ?", filter, null);
                 tempCursor.moveToFirst();
 
+                // Determine if the selected text matches what we are looking for
                 if((tempCursor.getString(3).trim().contains(selectedSMS.original)) &&
-                        !(tempCursor.getString(3).trim().contains("Following: ")))
+                        !(tempCursor.getString(3).trim().matches("(.*)Followers:(.*)Following:(.*)Reply w/ WHOIS(.*)to view profile.(.*)")) &&
+                        !(tempCursor.getString(3).trim().matches("(.*), since(.*).(.*)")))
                 {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("Tweet Options")
@@ -255,7 +257,48 @@ public class HomeFragment extends Fragment {
                     AlertDialog alertDialog = builder.create();
                     alertDialog.show();
                 }
-                else {
+                else if(selectedSMS.address.equals(SMSHelpers.userName))
+                {
+                    Cursor userCursor = smsTemp.query(sentURI, reqCols, "address LIKE ? AND body LIKE ?", filter, null);
+                    userCursor.moveToFirst();
+
+                    final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                    builder.setTitle("Tweet Options")
+                            .setItems(new CharSequence[]{"Delete"},
+                                    new DialogInterface.OnClickListener() {
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            // The 'which' argument contains the index position
+                                            // of the selected item
+                                            switch (which) {
+                                                case 0:
+                                                    //Delete SMS (deprecated for Kitkat)
+                                                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR2)
+                                                    {
+                                                        try {
+                                                            // Delete the SMS
+                                                            String pid = selectedSMS._id; // Get id;
+                                                            String uri = "content://sms/" + pid;
+                                                            viewContext.getContentResolver().delete(Uri.parse(uri), null, null);
+                                                            Toast.makeText(viewContext, "Deleted SMS!", Toast.LENGTH_LONG).show();
+                                                        } catch (Exception e) {
+                                                            Log.e("HOME", e.getStackTrace().toString());
+                                                        }
+                                                    }
+                                                    else
+                                                    {
+                                                        Toast.makeText(viewContext, "KitKat won't let me delete SMSes! Thanks Google!", Toast.LENGTH_LONG).show();
+                                                    }
+                                                    break;
+                                                default:
+                                                    break;
+                                            }
+                                        }
+                                    });
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+                }
+                else
+                {
                     final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                     builder.setTitle("Tweet Options")
                             .setItems(new CharSequence[]{"View Profile", "Reply", "Report", "Delete"},
