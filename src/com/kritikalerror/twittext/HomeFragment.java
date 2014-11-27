@@ -21,6 +21,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.kritikalerror.twittext.support.SwipeRefreshLayout;
+import com.kritikalerror.twittext.support.TimeStampComparator;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -35,7 +36,7 @@ public class HomeFragment extends Fragment {
     private View rootView;
 
     private Context mContext;
-    private Comparator<SMSObject> timeComparator = new TimestampComparator();
+    private Comparator<SMSObject> timeComparator = new TimeStampComparator();
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -308,13 +309,6 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
-    }
-
-    public class TimestampComparator implements Comparator<SMSObject> {
-        @Override
-        public int compare(SMSObject arg0, SMSObject arg1) {
-            return (int) (Long.parseLong(arg1.timestamp) - Long.parseLong(arg0.timestamp));
-        }
     }
 }
 
