@@ -94,23 +94,7 @@ public class ViewMessageActivity extends Activity  {
                                                 SMSHelpers.sendMessageSMS(getApplicationContext(), ViewMessageActivity.this, selectedSMS.address);
                                                 break;
                                             case 1:
-                                                //Delete SMS (deprecated for Kitkat)
-                                                if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR2)
-                                                {
-                                                    try {
-                                                        // Delete the SMS
-                                                        String pid = selectedSMS._id; // Get id;
-                                                        String uri = "content://sms/" + pid;
-                                                        getContentResolver().delete(Uri.parse(uri), null, null);
-                                                        Toast.makeText(ViewMessageActivity.this, "Deleted SMS!", Toast.LENGTH_LONG).show();
-                                                    } catch (Exception e) {
-                                                        Log.e(TAG, e.getStackTrace().toString());
-                                                    }
-                                                }
-                                                else
-                                                {
-                                                    Toast.makeText(ViewMessageActivity.this, "KitKat won't let me delete SMSes! Thanks Google!", Toast.LENGTH_LONG).show();
-                                                }
+                                                SMSHelpers.deleteSMS(ViewMessageActivity.this, selectedSMS);
                                                 break;
                                             default:
                                                 break;

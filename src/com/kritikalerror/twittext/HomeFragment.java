@@ -231,23 +231,7 @@ public class HomeFragment extends Fragment {
                                                     SMSHelpers.sendHiddenSMS(viewContext, "REPORT " + selectedSMS.address);
                                                     break;
                                                 case 5:
-                                                    //Delete SMS (deprecated for Kitkat)
-                                                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR2)
-                                                    {
-                                                        try {
-                                                            // Delete the SMS
-                                                            String pid = selectedSMS._id; // Get id;
-                                                            String uri = "content://sms/" + pid;
-                                                            viewContext.getContentResolver().delete(Uri.parse(uri), null, null);
-                                                            Toast.makeText(viewContext, "Deleted SMS!", Toast.LENGTH_LONG).show();
-                                                        } catch (Exception e) {
-                                                            Log.e("HOME", e.getStackTrace().toString());
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        Toast.makeText(viewContext, "KitKat won't let me delete SMSes! Thanks Google!", Toast.LENGTH_LONG).show();
-                                                    }
+                                                    SMSHelpers.deleteSMS(viewContext, selectedSMS);
                                                     break;
                                                 default:
                                                     break;
@@ -271,23 +255,7 @@ public class HomeFragment extends Fragment {
                                             // of the selected item
                                             switch (which) {
                                                 case 0:
-                                                    //Delete SMS (deprecated for Kitkat)
-                                                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR2)
-                                                    {
-                                                        try {
-                                                            // Delete the SMS
-                                                            String pid = selectedSMS._id; // Get id;
-                                                            String uri = "content://sms/" + pid;
-                                                            viewContext.getContentResolver().delete(Uri.parse(uri), null, null);
-                                                            Toast.makeText(viewContext, "Deleted SMS!", Toast.LENGTH_LONG).show();
-                                                        } catch (Exception e) {
-                                                            Log.e("HOME", e.getStackTrace().toString());
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        Toast.makeText(viewContext, "KitKat won't let me delete SMSes! Thanks Google!", Toast.LENGTH_LONG).show();
-                                                    }
+                                                    SMSHelpers.deleteSMS(viewContext, selectedSMS);
                                                     break;
                                                 default:
                                                     break;
@@ -328,23 +296,7 @@ public class HomeFragment extends Fragment {
                                                     SMSHelpers.sendHiddenSMS(viewContext, "REPORT " + selectedSMS.address);
                                                     break;
                                                 case 3:
-                                                    //Delete SMS (deprecated for Kitkat)
-                                                    if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR2)
-                                                    {
-                                                        try {
-                                                            // Delete the SMS
-                                                            String pid = selectedSMS._id; // Get id;
-                                                            String uri = "content://sms/" + pid;
-                                                            viewContext.getContentResolver().delete(Uri.parse(uri), null, null);
-                                                            Toast.makeText(viewContext, "Deleted SMS!", Toast.LENGTH_LONG).show();
-                                                        } catch (Exception e) {
-                                                            Log.e("HOME", e.getStackTrace().toString());
-                                                        }
-                                                    }
-                                                    else
-                                                    {
-                                                        Toast.makeText(viewContext, "KitKat won't let me delete SMSes! Thanks Google!", Toast.LENGTH_LONG).show();
-                                                    }
+                                                    SMSHelpers.deleteSMS(viewContext, selectedSMS);
                                                     break;
                                                 default:
                                                     break;

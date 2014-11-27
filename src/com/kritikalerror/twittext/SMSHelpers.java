@@ -8,7 +8,9 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.telephony.SmsManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -181,6 +183,31 @@ public class SMSHelpers {
         smsDialog.show();
 
         return true;
+    }
+
+    /**
+     * Deletes SMS, but deprecated for Kitkat
+     * @param context
+     * @param sms
+     */
+    public static void deleteSMS(Context context, SMSObject sms)
+    {
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.JELLY_BEAN_MR2)
+        {
+            try {
+                // Delete the SMS
+                String pid = sms._id; // Get id;
+                String uri = "content://sms/" + pid;
+                context.getContentResolver().delete(Uri.parse(uri), null, null);
+                Toast.makeText(context, "Deleted SMS!", Toast.LENGTH_LONG).show();
+            } catch (Exception e) {
+                Log.e("HOME", e.getStackTrace().toString());
+            }
+        }
+        else
+        {
+            Toast.makeText(context, "KitKat won't let me delete SMSes! Thanks Google!", Toast.LENGTH_LONG).show();
+        }
     }
 
     public static boolean isSMSTweet(String message)
