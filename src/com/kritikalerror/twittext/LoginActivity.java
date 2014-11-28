@@ -218,8 +218,17 @@ public class LoginActivity extends Activity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //TODO: test only!!
         // Populate SMS Inbox with fake data
+        SMSHelpers._addMessageToInbox(LoginActivity.this,
+                "Your phone is activated! Reply w/ HELP to check out all the things you can do with Twitter text messaging. Reply w/ STO");
+        SMSHelpers._addMessageToInbox(LoginActivity.this,
+                "For the best experience, download Twitter for your phone! Visit twitter.com/download");
+        SMSHelpers._addMessageToInbox(LoginActivity.this,
+                "Your phone is already set up to use Twitter. Reply w/ FOLLOW username to get their Tweets on your phone. ex: FOLLOW TWIT");
+        SMSHelpers._addMessageToInbox(LoginActivity.this,
+                "You're now following @Gizmodo. Their tweets will be sent to you. Send OFF @Gizmodo to stop.");
+        SMSHelpers._addMessageToInbox(LoginActivity.this,
+                "Notifications are now on. Reply w/OFF to turn them off. Reply w/SET for additional notification settings help.");
         SMSHelpers._addMessageToInbox(LoginActivity.this,
                 "Followers: 1,133,542 Following: 79 Reply w/ WHOIS @GIZMODO to view profile.");
         SMSHelpers._addMessageToInbox(LoginActivity.this,
@@ -258,13 +267,3 @@ public class LoginActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 }
-
-
-/*
-Your phone is activated! Reply w/ HELP to check out all the things you can do with Twitter text messaging. Reply w/ STO
-For the best experience, download Twitter for your phone! Visit twitter.com/download
-Your phone is already set up to use Twitter. Reply w/ FOLLOW username to get their Tweets on your phone. ex: FOLLOW TWIT
-
-You're now following @Gizmodo. Their tweets will be sent to you. Send OFF @Gizmodo to stop.
-Notifications are now on. Reply w/OFF to turn them off. Reply w/SET for additional notification settings help.
- */
