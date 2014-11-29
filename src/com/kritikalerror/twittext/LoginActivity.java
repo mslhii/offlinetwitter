@@ -81,9 +81,15 @@ public class LoginActivity extends Activity {
                     Intent smsIntent;
                     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) //Greater than JB
                     {
+                        /*
                         smsIntent = new Intent(Intent.ACTION_SENDTO,
                                 Uri.parse("smsto:" + Uri.encode(SMSHelpers.TWITTER_SHORTCODE)));
                         smsIntent.putExtra("sms_body", "");
+                        */
+                        smsIntent = new Intent(Intent.ACTION_VIEW);
+                        smsIntent.putExtra("address", SMSHelpers.TWITTER_SHORTCODE);
+                        smsIntent.putExtra("sms_body", "");
+                        smsIntent.setData(Uri.parse("smsto:" + SMSHelpers.TWITTER_SHORTCODE));
                         startActivity(smsIntent);
                     }
                     else
