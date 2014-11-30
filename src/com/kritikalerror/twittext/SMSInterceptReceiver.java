@@ -15,8 +15,6 @@ import android.widget.Toast;
  */
 public class SMSInterceptReceiver extends BroadcastReceiver {
 
-    final String TWITTER_SHORTCODE = "40404";
-
     @Override
     public void onReceive(Context context, Intent intent) {
         String smsAddress = "";
@@ -44,10 +42,9 @@ public class SMSInterceptReceiver extends BroadcastReceiver {
                 SMSHelpers.hasWHOISReceiver = true;
             }
 
-            Toast.makeText(context, debugMsg, Toast.LENGTH_SHORT).show();
-
             // Abort broadcast if it's from Twitter
-            if (smsAddress.equals(TWITTER_SHORTCODE)) {
+            if (smsAddress.equals(SMSHelpers.TWITTER_SHORTCODE)) {
+                Toast.makeText(context, debugMsg, Toast.LENGTH_SHORT).show();
                 abortBroadcast();
             }
         }

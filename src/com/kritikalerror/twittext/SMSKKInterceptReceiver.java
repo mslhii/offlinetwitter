@@ -18,6 +18,8 @@ public class SMSKKInterceptReceiver extends BroadcastReceiver {
     public static String statsKKMessage = "";
     public static String whoisKKMessage = "";
 
+    private boolean _isRightMsg = false;
+
     @Override
     public void onReceive(Context context, Intent intent) {
         String smsAddress = "";
@@ -37,17 +39,25 @@ public class SMSKKInterceptReceiver extends BroadcastReceiver {
             {
                 SMSHelpers.hasStatReceiver = true;
                 statsKKMessage = smsBody.trim();
+
+                _isRightMsg = true;
             }
             else if(smsBody.trim().matches("(.*), since (.*)"))
             {
                 SMSHelpers.hasWHOISReceiver = true;
                 whoisKKMessage = smsBody.trim();
+
+                _isRightMsg = true;
             }
 
-            String debugMsg = "Kitkat senderNum: " + smsAddress + "; message: " + smsBody;
-            Log.e("KITKATReceiver", debugMsg);
+            if (smsAddress.equals(SMSHelpers.TWITTER_SHORTCODE) && _isRightMsg) {
+                String debugMsg = "Kitkat senderNum: " + smsAddress + "; message: " + smsBody;
+                Log.e("KITKATReceiver", debugMsg);
 
-            Toast.makeText(context, debugMsg, Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, debugMsg, Toast.LENGTH_SHORT).show();
+
+                _isRightMsg = false;
+            }
         }
     }
 }
