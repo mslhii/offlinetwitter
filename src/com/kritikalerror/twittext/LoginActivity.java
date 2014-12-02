@@ -68,6 +68,7 @@ public class LoginActivity extends Activity {
         builder.setNegativeButton("OK",
             new DialogInterface.OnClickListener() {
                 public void onClick(DialogInterface dialog, int id) {
+                    /*
                     try {
                         SmsManager smsManager = SmsManager.getDefault();
                         smsManager.sendTextMessage(SMSHelpers.TWITTER_SHORTCODE, null, "START", null, null);
@@ -77,6 +78,7 @@ public class LoginActivity extends Activity {
                                 Toast.LENGTH_LONG).show();
                         e.printStackTrace();
                     }
+                    */
 
                     Intent smsIntent;
                     if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN_MR2) //Greater than JB
@@ -88,16 +90,16 @@ public class LoginActivity extends Activity {
                         */
                         smsIntent = new Intent(Intent.ACTION_VIEW);
                         smsIntent.putExtra("address", SMSHelpers.TWITTER_SHORTCODE);
-                        smsIntent.putExtra("sms_body", "");
+                        smsIntent.putExtra("sms_body", "START");
                         smsIntent.setData(Uri.parse("smsto:" + SMSHelpers.TWITTER_SHORTCODE));
-                        startActivity(smsIntent);
+                        startActivityForResult(smsIntent, BACK_RESULT);
                     }
                     else
                     {
                         smsIntent = new Intent(Intent.ACTION_VIEW);
                         smsIntent.setType("vnd.android-dir/mms-sms");
                         smsIntent.putExtra("address", SMSHelpers.TWITTER_SHORTCODE);
-                        smsIntent.putExtra("sms_body", "");
+                        smsIntent.putExtra("sms_body", "START");
                         startActivityForResult(smsIntent, BACK_RESULT);
                     }
 
