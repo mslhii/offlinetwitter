@@ -91,7 +91,8 @@ public class LoginActivity extends Activity {
                         smsIntent = new Intent(Intent.ACTION_VIEW);
                         smsIntent.putExtra("address", SMSHelpers.TWITTER_SHORTCODE);
                         smsIntent.putExtra("sms_body", "START");
-                        smsIntent.setData(Uri.parse("smsto:" + SMSHelpers.TWITTER_SHORTCODE));
+                        //smsIntent.setData(Uri.parse("smsto:" + SMSHelpers.TWITTER_SHORTCODE));
+                        smsIntent.setData(Uri.parse("sms:" + SMSHelpers.TWITTER_SHORTCODE));
                         startActivityForResult(smsIntent, BACK_RESULT);
                     }
                     else
