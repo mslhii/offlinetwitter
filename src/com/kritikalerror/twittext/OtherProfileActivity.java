@@ -77,6 +77,7 @@ public class OtherProfileActivity extends Activity {
         });
     }
 
+    //TODO: use thread and handler or asynctask?
     private class GetProfileInfo extends AsyncTask<Void, Void, String[]> {
         private Context context;
         private String address;
@@ -92,6 +93,8 @@ public class OtherProfileActivity extends Activity {
 
             if(this.hasExistingSMS)
             {
+                Log.e(SMSHelpers.TAG, "Found old SMS!");
+
                 // Set search params
                 final Uri inboxURI = Uri.parse("content://sms/inbox");
                 final String[] reqCols = new String[] { "_id", "address", "date", "body" };
@@ -128,7 +131,7 @@ public class OtherProfileActivity extends Activity {
                                 hasStats = true;
 
                                 _toastAsyncDebugger("STATS");
-                                Log.e(SMSHelpers.TAG, "Has STATS!");
+                                Log.e(SMSHelpers.TAG, "Found STATS!");
                             }
 
                             int secondTextIDX = temp.indexOf("2/2: ");
@@ -155,7 +158,7 @@ public class OtherProfileActivity extends Activity {
                                 hasWHOIS = true;
 
                                 _toastAsyncDebugger("WHOIS");
-                                Log.e(SMSHelpers.TAG, "Has WHOIS!");
+                                Log.e(SMSHelpers.TAG, "Found WHOIS!");
                             }
                         }
                     }
@@ -168,8 +171,13 @@ public class OtherProfileActivity extends Activity {
                 // Reset the two flags to make sure we can get future texts?
                 hasWHOIS = false;
                 hasStats = false;
+
+                _toastAsyncDebugger("Found and parsed SMS");
             }
             else {
+                Log.e(SMSHelpers.TAG, "Waiting for receiver!");
+                _toastAsyncDebugger("Waiting!");
+
                 // Wait for receiver to respond
                 String temp = "";
                 String shortAddr = address.replace("@", "");
@@ -181,9 +189,11 @@ public class OtherProfileActivity extends Activity {
                                 temp.contains(shortAddr.toUpperCase())) {
                             result[1] = temp;
                         }
+                        Log.e(SMSHelpers.TAG, "Has STATS!");
                     } else if (SMSHelpers.hasWHOISReceiver) {
                         //TODO: worry about joins later
                         result[0] = temp;
+                        Log.e(SMSHelpers.TAG, "Has WHOIS!");
                     }
 
                     if (mBreak) {
@@ -192,6 +202,8 @@ public class OtherProfileActivity extends Activity {
                 }
                 SMSHelpers.hasStatReceiver = false;
                 SMSHelpers.hasWHOISReceiver = false;
+
+                _toastAsyncDebugger("Received and parsed SMS");
             }
 
             //temp comment to aid in parsing
