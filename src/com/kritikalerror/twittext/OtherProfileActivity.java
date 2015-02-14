@@ -389,7 +389,7 @@ public class OtherProfileActivity extends Activity {
                 {
                     public void run()
                     {
-                        Toast.makeText(OtherProfileActivity.this, "Placed text in inbox!", Toast.LENGTH_SHORT);
+                        Toast.makeText(OtherProfileActivity.this, "Placed text in inbox!", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
