@@ -10,6 +10,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -75,6 +77,30 @@ public class OtherProfileActivity extends Activity {
                 SMSHelpers.sendHiddenSMS(getApplicationContext(), "LEAVE " + profileAddress);
             }
         });
+    }
+
+    private class GetProfileRunnable implements Runnable {
+
+        @Override
+        public void run() {
+
+        }
+
+        private void threadMessage(String message) {
+            if ((message != null) && !message.equals("")) {
+                Message messageObj = handler.obtainMessage();
+                Bundle bundle = new Bundle();
+                bundle.putString("message", message);
+                messageObj.setData(bundle);
+                handler.sendMessage(messageObj);
+            }
+        }
+
+        private final Handler handler = new Handler() {
+            public void handleMessage(Message message) {
+                //mFragmentText.setText(message.getData().getString("message"));
+            }
+        };
     }
 
     //TODO: use thread and handler or asynctask?
@@ -181,22 +207,31 @@ public class OtherProfileActivity extends Activity {
                 // Wait for receiver to respond
                 String temp = "";
                 String shortAddr = address.replace("@", "");
-                while (!(SMSHelpers.hasStatReceiver && SMSHelpers.hasWHOISReceiver)) {
+                while (true) {
                     if (SMSHelpers.hasStatReceiver) {
-                        temp = SMSKKInterceptReceiver.statsKKMessage;
+                        //temp = SMSKKInterceptReceiver.statsKKMessage;
+                        temp = SMSHelpers.statsMessage;
                         if (temp.contains(shortAddr) ||
                                 temp.contains(shortAddr.toLowerCase()) ||
                                 temp.contains(shortAddr.toUpperCase())) {
                             result[1] = temp;
                         }
                         Log.e(SMSHelpers.TAG, "Has STATS!");
-                    } else if (SMSHelpers.hasWHOISReceiver) {
+                    }
+                    if (SMSHelpers.hasWHOISReceiver) {
                         //TODO: worry about joins later
                         result[0] = temp;
                         Log.e(SMSHelpers.TAG, "Has WHOIS!");
                     }
 
+                    /*
                     if (mBreak) {
+                        break;
+                    }
+                    */
+
+                    if (SMSHelpers.hasStatReceiver && SMSHelpers.hasWHOISReceiver)
+                    {
                         break;
                     }
                 }
@@ -289,7 +324,7 @@ public class OtherProfileActivity extends Activity {
                     {
                         public void run()
                         {
-                            Toast.makeText(OtherProfileActivity.this, "Has: " + status + "!!!!!", Toast.LENGTH_SHORT);
+                            Toast.makeText(OtherProfileActivity.this, "Has: " + status + "!!!!!", Toast.LENGTH_SHORT).show();
                         }
                     });
                 }

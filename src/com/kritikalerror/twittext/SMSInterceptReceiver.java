@@ -33,13 +33,20 @@ public class SMSInterceptReceiver extends BroadcastReceiver {
             String debugMsg = "Regular senderNum: " + smsAddress + "; message: " + smsBody;
             Log.e(SMSHelpers.TAG, debugMsg);
 
-            if(smsBody.trim().matches("(.*)Followers:(.*)Following:(.*)Reply w/ WHOIS(.*)to view profile.(.*)"))
+            String mainMessage = smsBody.trim();
+
+            if(mainMessage.matches("(.*)Followers:(.*)Following:(.*)Reply w/ WHOIS(.*)to view profile.(.*)"))
             {
                 SMSHelpers.hasStatReceiver = true;
+                SMSHelpers.whoisMessage = mainMessage;
+                Toast.makeText(context, "Found WHOIS!", Toast.LENGTH_SHORT).show();
             }
-            else if(smsBody.trim().matches("(.*), since (.*)"))
+
+            if(mainMessage.matches("(.*), since (.*)"))
             {
                 SMSHelpers.hasWHOISReceiver = true;
+                SMSHelpers.statsMessage = mainMessage;
+                Toast.makeText(context, "Found STATS!", Toast.LENGTH_SHORT).show();
             }
 
             // Abort broadcast if it's from Twitter

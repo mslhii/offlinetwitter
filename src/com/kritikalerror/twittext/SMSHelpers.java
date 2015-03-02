@@ -40,6 +40,9 @@ public class SMSHelpers {
     public static boolean hasStatReceiver = false;
     public static boolean hasWHOISReceiver = false;
 
+    public static String whoisMessage = "";
+    public static String statsMessage = "";
+
     public static boolean sendHiddenSMS(final Context context, String actionString) {
         try {
             SmsManager smsManager = SmsManager.getDefault();
