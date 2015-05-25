@@ -217,11 +217,13 @@ public class OtherProfileActivity extends Activity {
                             result[1] = temp;
                         }
                         Log.e(SMSHelpers.TAG, "Has STATS!");
+                        _toastAsyncDebugger("Has STATS!");
                     }
                     if (SMSHelpers.hasWHOISReceiver) {
                         //TODO: worry about joins later
                         result[0] = temp;
                         Log.e(SMSHelpers.TAG, "Has WHOIS!");
+                        _toastAsyncDebugger("Has WHOIS!");
                     }
 
                     /*
@@ -277,7 +279,7 @@ public class OtherProfileActivity extends Activity {
                 SMSHelpers.sendHiddenSMS(context, "STATS " + address);
 
                 //TODO: unit tests!
-                _profileLoadUnitTest(address.substring(1));
+                //_profileLoadUnitTest(address.substring(1));
             }
             else
             {
