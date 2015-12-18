@@ -7,7 +7,7 @@ The goal of this app is to provide a user with an offline Twitter experience.
 Due to robust Twitter SMS APIs, it's entirely possible to construct an app UI to hit Twitter servers without any internet connection.
 Such an app can be good for developing countries lacking robust internet or mobile data infrastructure.
 
-The current version as is tests SMS functionality and integration into the UI. Placed on hiatus now.
+The current version as is tests SMS functionality and integration into the UI. Placed on hiatus now. Not sure when will work on it again
 
 V1 Features added:
 - SMS sorting by notifications/actual texts
